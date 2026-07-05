@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Stop Personalized Career and Educational Advisor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   PATHFOLIO — Career & Educational Advisor
+   Design tokens: deep indigo-navy base, teal + amber accents
+   ========================================================= */
+
+:root{
+  --bg: #F6F7FB;
+  --bg-alt: #EEF1F8;
+  --surface: #FFFFFF;
+  --surface-2: #FFFFFF;
+  --border: rgba(20,28,55,0.10);
+  --text: #131A2E;
+  --text-muted: #5B6479;
+  --text-soft: #838DA3;
+
+  --navy: #0F1B33;
+  --navy-2: #16233F;
+  --teal: #0FA98E;
+  --teal-2: #0C8A75;
+  --amber: #F5A524;
+  --amber-2: #E0900F;
+  --coral: #EF6461;
+
+  --grad-1: linear-gradient(135deg, #0FA98E 0%, #1C5CA6 50%, #16233F 100%);
+  --grad-2: linear-gradient(120deg, #F5A524 0%, #EF6461 100%);
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 26px;
+  --shadow-sm: 0 2px 10px rgba(15,27,51,0.06);
+  --shadow: 0 12px 32px rgba(15,27,51,0.10);
+  --shadow-lg: 0 24px 60px rgba(15,27,51,0.16);
+
+  --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"]{
+  --bg: #0B1120;
+  --bg-alt: #0F1729;
+  --surface: #131C31;
+  --surface-2: #182238;
+  --border: rgba(255,255,255,0.09);
+  --text: #EAEFFB;
+  --text-muted: #9AA6C0;
+  --text-soft: #6C7793;
+
+  --navy: #060A15;
+  --shadow-sm: 0 2px 10px rgba(0,0,0,0.25);
+  --shadow: 0 14px 36px rgba(0,0,0,0.35);
+  --shadow-lg: 0 26px 64px rgba(0,0,0,0.5);
+  color-scheme: dark;
+}
+
+*,*::before,*::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin:0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  transition: background .35s ease, color .35s ease;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img{ max-width:100%; display:block; }
+a{ color: inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+h1,h2,h3,h4,h5{ font-family: var(--font-display); margin:0; line-height:1.15; letter-spacing:-0.01em; }
+p{ margin:0; }
+button{ font-family: inherit; cursor:pointer; }
+input,select,textarea{ font-family: inherit; }
+.container{ max-width: 1220px; margin:0 auto; padding: 0 28px; }
+.muted{ color: var(--text-muted); }
+.small{ font-size: 0.82rem; }
+
+/* ---------- Loader ---------- */
+.loader{
+  position: fixed; inset:0; z-index: 9999;
+  background: var(--navy);
+  display:flex; align-items:center; justify-content:center;
+  transition: opacity .6s ease, visibility .6s ease;
+}
+.loader.hide{ opacity:0; visibility:hidden; }
+.loader-inner{ text-align:center; }
+.loader-compass{
+  width:64px; height:64px; margin:0 auto 18px;
+  border-radius:50%; border:3px solid rgba(255,255,255,0.15);
+  position:relative;
+}
+.compass-needle{
+  position:absolute; top:50%; left:50%; width:3px; height:26px;
+  background: linear-gradient(to bottom, var(--amber), var(--teal));
+  transform-origin: bottom center;
+  transform: translate(-50%,-100%) rotate(0deg);
+  animation: spin-needle 1.1s linear infinite;
+  border-radius: 3px;
+}
+@keyframes spin-needle{ to{ transform: translate(-50%,-100%) rotate(360deg); } }
+.loader-text{ color:#EAEFFB; font-family: var(--font-mono); font-size:0.92rem; letter-spacing:0.04em; }
+.dots span{ animation: blink 1.4s infinite; opacity:0; }
+.dots span:nth-child(2){ animation-delay:.2s; }
+.dots span:nth-child(3){ animation-delay:.4s; }
+@keyframes blink{ 0%,100%{opacity:0;} 50%{opacity:1;} }
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding: 12px 22px; border-radius: 999px; font-weight:600; font-size:0.95rem;
+  border: 1px solid transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+  white-space: nowrap;
+}
+.btn:active{ transform: scale(0.97); }
+.btn-primary{
+  background: var(--grad-1); color:#fff; box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover{ box-shadow: var(--shadow); transform: translateY(-2px); }
+.btn-ghost{
+  background: transparent; color: var(--text); border-color: var(--border);
+}
+.btn-ghost:hover{ background: var(--surface-2); border-color: var(--teal); }
+.btn-lg{ padding: 15px 30px; font-size:1.02rem; }
+.btn-sm{ padding: 9px 16px; font-size:0.85rem; }
+
+/* ---------- Navbar ---------- */
+.navbar{
+  position: fixed; top:0; left:0; right:0; z-index: 1000;
+  background: rgba(246,247,251,0.72);
+  backdrop-filter: blur(14px) saturate(1.4);
+  border-bottom: 1px solid transparent;
+  transition: background .3s ease, border-color .3s ease;
+}
+[data-theme="dark"] .navbar{ background: rgba(11,17,32,0.72); }
+.navbar.scrolled{ border-bottom-color: var(--border); box-shadow: var(--shadow-sm); }
+.nav-inner{
+  max-width: 1220px; margin:0 auto; padding: 14px 28px;
+  display:flex; align-items:center; justify-content:space-between; gap: 24px;
+}
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:700; font-size:0.98rem; max-width: 420px; }
+.brand-name{ line-height:1.15; }
+.brand-mark{
+  width:36px; height:36px; border-radius:10px; background: var(--grad-1);
+  color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.82rem; font-weight:700;
+}
+.nav-links{ display:flex; gap: 28px; }
+.nav-link{ font-size:0.93rem; font-weight:500; color: var(--text-muted); position:relative; padding: 4px 0; transition: color .2s; }
+.nav-link::after{
+  content:''; position:absolute; left:0; bottom:-2px; width:0; height:2px; background: var(--grad-1);
+  transition: width .25s ease;
+}
+.nav-link:hover{ color: var(--text); }
+.nav-link:hover::after{ width:100%; }
+.nav-actions{ display:flex; align-items:center; gap:14px; }
+.icon-btn{
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+  background: var(--surface); display:flex; align-items:center; justify-content:center;
+  color: var(--text); transition: background .2s, border-color .2s;
+}
+.icon-btn:hover{ border-color: var(--teal); }
+.icon-btn svg{ fill:none; stroke: currentColor; }
+.icon-moon{ display:none; }
+[data-theme="dark"] .icon-sun{ display:none; }
+[data-theme="dark"] .icon-moon{ display:block; fill: currentColor; stroke:none; }
+.nav-cta{ display:inline-flex; }
+.hamburger{ display:none; flex-direction:column; gap:5px; background:none; border:none; padding:6px; }
+.hamburger span{ width:22px; height:2px; background: var(--text); border-radius:2px; transition: transform .25s, opacity .25s; }
+.hamburger.active span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+.hamburger.active span:nth-child(2){ opacity:0; }
+.hamburger.active span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+/* ---------- Hero ---------- */
+.hero{
+  position: relative; min-height: 100vh; display:flex; align-items:center; justify-content:center;
+  overflow: hidden; background: var(--navy); color:#fff; padding: 140px 24px 100px;
+}
+.hero-canvas{ position:absolute; inset:0; width:100%; height:100%; }
+.hero-grid-overlay{
+  position:absolute; inset:0;
+  background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+.hero-content{ position:relative; z-index:2; max-width: 880px; text-align:center; margin:0 auto; }
+.eyebrow{
+  display:inline-block; font-family: var(--font-mono); font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--teal); margin-bottom:18px; padding: 6px 14px; border:1px solid rgba(15,169,142,0.4); border-radius:999px;
+}
+.hero-title{ font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight:700; margin-bottom:22px; color:#fff; }
+.gradient-text{
+  background: linear-gradient(100deg, #3DD9BE, #F5A524 60%, #EF6461);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-sub{ font-size:1.08rem; color: rgba(234,239,251,0.8); max-width:640px; margin: 0 auto 34px; line-height:1.65; }
+.hero-actions{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom: 56px; }
+.hero .btn-ghost{ color:#fff; border-color: rgba(255,255,255,0.25); }
+.hero .btn-ghost:hover{ background: rgba(255,255,255,0.08); }
+.hero-stats{ display:flex; gap: 40px; justify-content:center; flex-wrap:wrap; }
+.stat{ text-align:center; }
+.stat-num{ display:block; font-family: var(--font-display); font-size:2.1rem; font-weight:700; color:#fff; }
+.stat-label{ font-size:0.82rem; color: rgba(234,239,251,0.65); }
+.scroll-cue{
+  position:absolute; bottom: 28px; left:50%; transform: translateX(-50%); z-index:2;
+  width:26px; height:42px; border:2px solid rgba(255,255,255,0.35); border-radius:14px;
+}
+.scroll-cue span{
+  position:absolute; top:6px; left:50%; width:4px; height:8px; background:#fff; border-radius:2px;
+  transform: translateX(-50%); animation: scroll-cue-move 1.8s ease infinite;
+}
+@keyframes scroll-cue-move{ 0%{ opacity:1; top:6px;} 70%{opacity:0; top:22px;} 100%{opacity:0; top:6px;} }
+
+/* ---------- Sections ---------- */
+.section{ padding: 100px 0; }
+.section.alt{ background: var(--bg-alt); }
+.section-head{ max-width: 700px; margin: 0 auto 48px; text-align:center; }
+.section-head h2{ font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-top: 10px; }
+.section-sub{ color: var(--text-muted); margin-top:12px; font-size:1rem; line-height:1.6; }
+.section-head .eyebrow{ color: var(--teal-2); border-color: rgba(15,169,142,0.35); }
+
+/* ---------- About ---------- */
+.about-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items:center; }
+.about-copy p{ color: var(--text-muted); line-height:1.75; margin-bottom:18px; font-size:1.02rem; }
+.about-pillars{ display:grid; grid-template-columns: repeat(3,1fr); gap:20px; margin-top:32px; }
+.pillar{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:20px; }
+.pillar-num{ font-family: var(--font-mono); color: var(--teal); font-size:0.85rem; }
+.pillar h4{ margin: 8px 0 6px; font-size:1.05rem; }
+.pillar p{ color: var(--text-muted); font-size:0.88rem; line-height:1.5; }
+
+.about-visual{ display:flex; align-items:center; justify-content:center; }
+.orbit-card{ position:relative; width: 340px; height: 340px; display:flex; align-items:center; justify-content:center; }
+.orbit-ring{ position:absolute; border-radius:50%; border: 1px dashed var(--border); }
+.r1{ width:120px; height:120px; }
+.r2{ width:220px; height:220px; animation: spin-slow 30s linear infinite; }
+.r3{ width:320px; height:320px; animation: spin-slow-rev 45s linear infinite; }
+@keyframes spin-slow{ to{ transform: rotate(360deg); } }
+@keyframes spin-slow-rev{ to{ transform: rotate(-360deg); } }
+.orbit-center{
+  width:96px; height:96px; border-radius:50%; background: var(--grad-1); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-family: var(--font-display);
+  box-shadow: var(--shadow);
+  z-index:2;
+}
+.orbit-chip{
+  position:absolute; background: var(--surface); border:1px solid var(--border); padding:6px 12px; border-radius:999px;
+  font-size:0.78rem; font-weight:600; box-shadow: var(--shadow-sm); color: var(--text);
+}
+.c1{ top: 6%; left: 50%; transform: translateX(-50%); }
+.c2{ top: 26%; right: 2%; }
+.c3{ bottom: 26%; right: 2%; }
+.c4{ bottom: 6%; left: 50%; transform: translateX(-50%); }
+.c5{ bottom: 26%; left: 2%; }
+.c6{ top: 26%; left: 2%; }
+
+/* ---------- Features ---------- */
+.feature-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.feature-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+  padding: 26px 22px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.feature-card:hover{ transform: translateY(-6px); box-shadow: var(--shadow); border-color: rgba(15,169,142,0.4); }
+.feature-icon{ width:44px; height:44px; border-radius:12px; margin-bottom:16px; background: var(--grad-1); position:relative; }
+.feature-icon::after{ content:''; position:absolute; inset:0; border-radius:12px; background: rgba(255,255,255,0.15); }
+.fi-2{ background: linear-gradient(135deg,#F5A524,#EF6461); }
+.fi-3{ background: linear-gradient(135deg,#1C5CA6,#0FA98E); }
+.fi-4{ background: linear-gradient(135deg,#EF6461,#F5A524); }
+.fi-5{ background: linear-gradient(135deg,#16233F,#1C5CA6); }
+.fi-6{ background: linear-gradient(135deg,#0FA98E,#16233F); }
+.fi-7{ background: linear-gradient(135deg,#5B6479,#131A2E); }
+.fi-8{ background: linear-gradient(135deg,#F5A524,#0FA98E); }
+.feature-card h3{ font-size:1.08rem; margin-bottom:8px; }
+.feature-card p{ color: var(--text-muted); font-size:0.92rem; line-height:1.55; }
+
+/* ---------- Dashboard Overview (Career Planning Dashboard) ---------- */
+.cpd-grid{ display:grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; gap:20px; }
+.cpd-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow-sm);
+}
+.cpd-profile{ display:flex; gap:16px; align-items:center; }
+.cpd-avatar{
+  width:58px; height:58px; border-radius:50%; background: var(--grad-1); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-weight:700; font-family: var(--font-display); flex-shrink:0;
+}
+.cpd-tags{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.tag{ background: var(--bg-alt); border:1px solid var(--border); padding:4px 10px; border-radius:999px; font-size:0.74rem; color: var(--text-muted); }
+.cpd-label{ font-size:0.8rem; color: var(--text-soft); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; }
+.cpd-card h3{ font-size:1.25rem; margin-bottom:12px; }
+.progress{ height:8px; border-radius:999px; background: var(--bg-alt); overflow:hidden; margin-bottom:8px; }
+.progress-fill{ height:100%; border-radius:999px; background: var(--grad-1); transition: width 1s cubic-bezier(.22,1,.36,1); }
+.progress-amber{ background: linear-gradient(90deg,#F5A524,#EF6461); }
+.progress-teal{ background: linear-gradient(90deg,#0FA98E,#1C5CA6); }
+.cpd-percent{ font-size:0.82rem; color: var(--text-muted); font-weight:600; }
+.dashboard-hint{ text-align:center; margin-top:26px; color: var(--text-muted); font-size:0.92rem; }
+
+/* ---------- Model sections ---------- */
+.section-tools-intro{ padding: 80px 0 20px; }
+.model-section{ padding: 70px 0; scroll-margin-top: 90px; }
+.model-header{ display:flex; gap:20px; align-items:flex-start; margin-bottom:34px; max-width: 900px; }
+.model-index{
+  font-family: var(--font-display); font-size:2.6rem; font-weight:700;
+  background: var(--grad-1); -webkit-background-clip:text; background-clip:text; color:transparent; line-height:1;
+}
+.model-header h2{ font-size: clamp(1.4rem,2.6vw,1.9rem); margin-bottom:8px; }
+.model-panel{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 32px; box-shadow: var(--shadow-sm);
+}
+.two-col{ display:grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+
+/* Forms */
+.form-row{ margin-bottom:16px; display:flex; flex-direction:column; gap:6px; }
+.form-row.two{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+.form-row.two > div{ display:flex; flex-direction:column; gap:6px; }
+label{ font-size:0.84rem; font-weight:600; color: var(--text-muted); }
+input[type="text"], input[type="email"], input[type="number"], select, textarea{
+  padding: 11px 14px; border-radius: 10px; border:1px solid var(--border); background: var(--bg-alt);
+  color: var(--text); font-size:0.94rem; outline:none; transition: border-color .2s, background .2s;
+  width:100%;
+}
+input:focus, select:focus, textarea:focus{ border-color: var(--teal); background: var(--surface); }
+textarea{ resize: vertical; }
+.form-actions{ display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
+
+.slider-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; margin: 10px 0 20px; }
+.slider-item{ display:flex; flex-direction:column; gap:6px; }
+.slider-item .slabel{ display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600; }
+.slider-item .slabel span:last-child{ color: var(--teal-2); font-family: var(--font-mono); }
+input[type="range"]{
+  -webkit-appearance:none; width:100%; height:6px; border-radius:999px; background: var(--bg-alt); outline:none;
+  border: 1px solid var(--border);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background: var(--grad-1);
+  cursor:pointer; border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--teal);
+}
+input[type="range"]::-moz-range-thumb{
+  width:18px; height:18px; border-radius:50%; background: var(--teal); cursor:pointer; border: 3px solid var(--surface);
+}
+
+.model-results{ background: var(--bg-alt); border-radius: var(--radius); padding: 24px; min-height: 260px; }
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:220px; text-align:center; color: var(--text-soft); gap:10px; }
+.empty-icon{ font-size:2.4rem; opacity:0.7; }
+
+/* Career result cards */
+.match-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:18px; margin-bottom:14px;
+  animation: fadeInUp .5s ease both;
+}
+.match-card:last-child{ margin-bottom:0; }
+.match-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap: 10px;}
+.match-top h4{ font-size:1.02rem; }
+.match-badge{ font-family: var(--font-mono); font-size:0.82rem; font-weight:700; color:#fff; background: var(--grad-1); padding:3px 10px; border-radius:999px; white-space:nowrap; }
+.match-desc{ font-size:0.86rem; color: var(--text-muted); margin-bottom:10px; line-height:1.5; }
+.match-meta{ display:flex; gap:14px; flex-wrap:wrap; font-size:0.78rem; color: var(--text-soft); }
+.match-meta strong{ color: var(--text); }
+
+@keyframes fadeInUp{ from{ opacity:0; transform: translateY(14px); } to{ opacity:1; transform:none; } }
+
+/* Inline controls */
+.inline-controls{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom: 26px; }
+.inline-controls label{ margin-bottom:0; }
+.inline-controls select{ width:auto; min-width:220px; }
+
+/* Course cards */
+.course-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:20px; }
+.course-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:20px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.course-card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); }
+.course-card h4{ font-size:1rem; margin-bottom:6px; }
+.course-tag{ display:inline-block; font-size:0.72rem; font-weight:700; color: var(--teal-2); background: rgba(15,169,142,0.12); padding:3px 9px; border-radius:999px; margin-bottom:10px; }
+.course-card p{ color: var(--text-muted); font-size:0.85rem; line-height:1.5; margin-bottom:10px; }
+.course-foot{ display:flex; justify-content:space-between; font-size:0.78rem; color: var(--text-soft); border-top:1px solid var(--border); padding-top:10px; }
+
+/* College grid */
+.filter-bar{ display:grid; grid-template-columns: 1fr 1.4fr 1fr auto; gap:20px; align-items:end; margin-bottom:28px; }
+.filter-bar > div{ display:flex; flex-direction:column; gap:6px; }
+.filter-bar input[type="range"]{ margin-top:4px; }
+.college-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:20px; }
+.college-card{
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:20px;
+  transition: transform .2s ease, box-shadow .2s ease; animation: fadeInUp .4s ease both;
+}
+.college-card:hover{ transform: translateY(-4px); box-shadow: var(--shadow); }
+.college-top{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+.college-rating{ font-family: var(--font-mono); font-size:0.8rem; color: var(--amber-2); font-weight:700; }
+.college-card h4{ font-size:1rem; margin-bottom:4px; }
+.college-loc{ font-size:0.8rem; color: var(--text-soft); margin-bottom:10px; }
+.college-stream-tag{ display:inline-block; font-size:0.72rem; font-weight:700; color:#fff; background: var(--grad-1); padding:3px 9px; border-radius:999px; margin-bottom:10px; }
+.college-fees{ font-size:0.86rem; font-weight:700; color: var(--text); }
+.college-fees span{ font-weight:400; color: var(--text-soft); font-size:0.78rem; }
+.no-results{ grid-column: 1/-1; text-align:center; color: var(--text-soft); padding: 40px 0; }
+
+/* College "View Ratings" button + modal */
+.college-view-btn{
+  margin-top: 12px; width:100%; padding: 9px 0; border-radius: 999px;
+  background: var(--bg-alt); border:1px solid var(--border); color: var(--text);
+  font-weight:600; font-size:0.82rem; transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.college-view-btn:hover{ background: var(--grad-1); color:#fff; border-color: transparent; }
+
+.college-modal-overlay{
+  position: fixed; inset:0; background: rgba(6,10,21,0.6); backdrop-filter: blur(4px);
+  display:flex; align-items:center; justify-content:center; padding: 24px; z-index: 2000;
+  opacity:0; visibility:hidden; transition: opacity .25s ease, visibility .25s ease;
+}
+.college-modal-overlay.show{ opacity:1; visibility:visible; }
+.college-modal{
+  background: var(--surface); border-radius: var(--radius-lg); padding: 32px;
+  max-width: 480px; width:100%; max-height: 85vh; overflow-y:auto; position:relative;
+  box-shadow: var(--shadow-lg); transform: translateY(16px); transition: transform .25s ease;
+  border: 1px solid var(--border);
+}
+.college-modal-overlay.show .college-modal{ transform: translateY(0); }
+.college-modal-close{
+  position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%;
+  background: var(--bg-alt); border:1px solid var(--border); color: var(--text); font-size:0.9rem;
+}
+.college-modal-close:hover{ background: var(--coral); color:#fff; border-color: transparent; }
+.cm-stream-tag{ display:inline-block; font-size:0.72rem; font-weight:700; color:#fff; background: var(--grad-1); padding:3px 10px; border-radius:999px; margin-bottom:12px; }
+.cm-title{ font-size:1.3rem; margin-bottom:4px; padding-right:30px; }
+.cm-loc{ color: var(--text-soft); font-size:0.86rem; margin-bottom:18px; }
+.cm-overall{ display:flex; align-items:center; gap:14px; background: var(--bg-alt); border-radius: var(--radius); padding:16px 18px; margin-bottom:20px; }
+.cm-overall .cm-score{ font-family: var(--font-display); font-size:2rem; font-weight:700; color: var(--amber-2); }
+.cm-overall .cm-stars{ color: var(--amber); font-size:1.05rem; letter-spacing:2px; }
+.cm-overall .cm-overall-label{ font-size:0.78rem; color: var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; }
+.rating-row{ margin-bottom:14px; }
+.rating-row-top{ display:flex; justify-content:space-between; font-size:0.86rem; font-weight:600; margin-bottom:6px; }
+.rating-row-top span:last-child{ color: var(--teal-2); font-family: var(--font-mono); }
+.rating-bar{ height:7px; border-radius:999px; background: var(--bg-alt); overflow:hidden; }
+.rating-bar-fill{ height:100%; border-radius:999px; background: var(--grad-1); }
+.cm-fees{ margin-top:20px; padding-top:18px; border-top:1px solid var(--border); display:flex; justify-content:space-between; font-size:0.9rem; }
+.cm-fees strong{ font-size:1.05rem; }
+
+/* Skill gap */
+.gap-list{ margin-top: 18px; display:flex; flex-direction:column; gap:10px; }
+.gap-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; background: var(--surface); padding:10px 14px; border-radius:10px; border:1px solid var(--border); }
+.gap-row .gname{ font-size:0.88rem; font-weight:600; }
+.gap-status{ font-size:0.76rem; font-weight:700; padding:3px 10px; border-radius:999px; white-space:nowrap; }
+.gap-status.ok{ background: rgba(15,169,142,0.15); color: var(--teal-2); }
+.gap-status.warn{ background: rgba(245,165,36,0.18); color: var(--amber-2); }
+.gap-status.bad{ background: rgba(239,100,97,0.18); color: var(--coral); }
+
+/* Timeline (Roadmap) */
+.timeline{ position:relative; padding-left: 6px; }
+.timeline-stage{
+  position:relative; padding: 0 0 34px 40px; border-left: 2px solid var(--border);
+  animation: fadeInUp .5s ease both;
+}
+.timeline-stage:last-child{ border-color:transparent; padding-bottom:0; }
+.timeline-dot{
+  position:absolute; left:-11px; top:0; width:20px; height:20px; border-radius:50%;
+  background: var(--grad-1); border:4px solid var(--bg); box-shadow: 0 0 0 2px var(--teal);
+}
+[data-theme="dark"] .timeline-dot{ border-color: var(--bg); }
+.timeline-stage h4{ font-size:1.02rem; margin-bottom:6px; }
+.timeline-stage .stage-when{ font-family: var(--font-mono); font-size:0.76rem; color: var(--teal-2); margin-bottom:8px; display:inline-block; }
+.timeline-stage ul{ display:flex; flex-direction:column; gap:6px; }
+.timeline-stage li{ font-size:0.88rem; color: var(--text-muted); padding-left:18px; position:relative; }
+.timeline-stage li::before{ content:'→'; position:absolute; left:0; color: var(--teal); }
+
+/* Student dashboard */
+.student-dash{ display:grid; grid-template-columns: 1fr 1.4fr; gap: 36px; }
+.sd-cards{ display:grid; grid-template-columns: repeat(2,1fr); gap:16px; align-content:start; }
+.sd-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:20px; }
+.sd-card .sd-value{ font-family: var(--font-display); font-size:1.9rem; font-weight:700; margin: 6px 0; }
+.sd-card .sd-label{ font-size:0.8rem; color: var(--text-soft); text-transform:uppercase; letter-spacing:0.04em; }
+.sd-card .sd-note{ font-size:0.8rem; color: var(--text-muted); margin-top:6px; }
+.sd-card.wide{ grid-column: 1/-1; }
+
+/* Charts */
+.chart-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap:24px; }
+.chart-card{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding:20px; }
+.chart-card h4{ font-size:0.95rem; margin-bottom:14px; color: var(--text-muted); }
+.chart-card canvas{ max-height: 260px; }
+
+/* Report */
+.report-panel{ display:grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items:start; }
+.report-preview{ background: var(--bg-alt); border-radius: var(--radius); padding: 26px; min-height: 320px; }
+.report-block{ margin-bottom:18px; }
+.report-block h4{ font-size:0.82rem; text-transform:uppercase; letter-spacing:0.05em; color: var(--teal-2); margin-bottom:8px; }
+.report-block p, .report-block li{ font-size:0.9rem; color: var(--text); line-height:1.6; }
+.report-actions{ display:flex; flex-direction:column; gap:14px; align-items:flex-start; position: sticky; top: 110px; }
+
+/* FAQ */
+.faq-list{ max-width: 780px; margin: 0 auto; display:flex; flex-direction:column; gap:14px; }
+.faq-item{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); overflow:hidden; }
+.faq-q{
+  width:100%; text-align:left; background:none; border:none; padding: 20px 24px; display:flex; justify-content:space-between; align-items:center;
+  font-weight:600; font-size:0.98rem; color: var(--text);
+}
+.faq-q .plus{ font-size:1.3rem; color: var(--teal); transition: transform .25s ease; flex-shrink:0; margin-left:12px; }
+.faq-item.open .faq-q .plus{ transform: rotate(45deg); }
+.faq-a{ max-height:0; overflow:hidden; transition: max-height .35s ease, padding .35s ease; padding: 0 24px; }
+.faq-item.open .faq-a{ max-height: 260px; padding: 0 24px 22px; }
+.faq-a p{ color: var(--text-muted); font-size:0.9rem; line-height:1.6; }
+
+/* Contact */
+.contact-grid{ display:grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; }
+.contact-info h2{ font-size: clamp(1.6rem,3vw,2.1rem); margin: 10px 0 16px; }
+.contact-info p{ color: var(--text-muted); line-height:1.65; margin-bottom:24px; }
+.contact-details{ display:flex; flex-direction:column; gap:10px; }
+.contact-details li{ font-size:0.92rem; color: var(--text-muted); }
+.contact-form{ background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg); padding:32px; box-shadow: var(--shadow-sm); }
+.form-status{ margin-top:12px; font-size:0.88rem; font-weight:600; min-height:20px; }
+.form-status.success{ color: var(--teal-2); }
+
+/* Footer */
+.footer{ background: var(--navy); color: rgba(234,239,251,0.75); padding: 70px 0 0; }
+.footer-grid{ display:grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap:40px; padding-bottom: 50px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.footer-brand p{ margin: 16px 0 20px; font-size:0.9rem; line-height:1.6; max-width: 320px; }
+.footer-social{ display:flex; gap:10px; }
+.footer-social a{
+  width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,0.15);
+  display:flex; align-items:center; justify-content:center; font-size:0.85rem; transition: background .2s, border-color .2s;
+}
+.footer-social a:hover{ background: rgba(255,255,255,0.08); border-color: var(--teal); }
+.footer-col h5{ color:#fff; font-size:0.9rem; margin-bottom:16px; letter-spacing:0.03em; }
+.footer-col{ display:flex; flex-direction:column; gap:10px; }
+.footer-col a{ font-size:0.88rem; color: rgba(234,239,251,0.65); transition: color .2s; }
+.footer-col a:hover{ color: var(--teal); }
+.footer-bottom{ display:flex; justify-content:space-between; padding: 22px 28px; font-size:0.8rem; max-width:1220px; margin:0 auto; flex-wrap:wrap; gap:8px; }
+
+/* Back to top */
+.back-to-top{
+  position:fixed; bottom:26px; right:26px; width:46px; height:46px; border-radius:50%;
+  background: var(--grad-1); color:#fff; border:none; font-size:1.1rem; box-shadow: var(--shadow);
+  opacity:0; visibility:hidden; transform: translateY(10px); transition: all .3s ease; z-index: 900;
+}
+.back-to-top.show{ opacity:1; visibility:visible; transform:none; }
+.back-to-top:hover{ transform: translateY(-4px); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1080px){
+  .feature-grid{ grid-template-columns: repeat(2,1fr); }
+  .cpd-grid{ grid-template-columns: 1fr 1fr; }
+  .course-grid, .college-grid{ grid-template-columns: repeat(2,1fr); }
+  .chart-grid{ grid-template-columns: 1fr; }
+  .filter-bar{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px){
+  .nav-links{ display:none; }
+  .hamburger{ display:flex; }
+  .nav-cta{ display:none; }
+  .brand{ font-size:0.82rem; max-width: 220px; }
+  .about-grid, .two-col, .student-dash, .report-panel, .contact-grid{ grid-template-columns: 1fr; }
+  .about-visual{ order:-1; margin-bottom: 20px; }
+  .orbit-card{ transform: scale(0.85); }
+}
+@media (max-width: 720px){
+  .navbar.open .nav-links{
+    display:flex; position:absolute; top:100%; left:0; right:0; flex-direction:column;
+    background: var(--surface); padding: 20px 28px; gap:18px; border-bottom:1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .feature-grid, .cpd-grid, .course-grid, .college-grid, .sd-cards, .about-pillars, .form-row.two{ grid-template-columns: 1fr; }
+  .filter-bar{ grid-template-columns: 1fr; }
+  .slider-grid{ grid-template-columns: 1fr; }
+  .hero-stats{ gap:24px; }
+  .section{ padding: 70px 0; }
+  .model-header{ flex-direction:column; gap:8px; }
+  .footer-grid{ grid-template-columns: 1fr 1fr; }
+  .footer-bottom{ flex-direction:column; text-align:center; }
+}
+@media (max-width: 480px){
+  .footer-grid{ grid-template-columns: 1fr; }
+  .hero-title{ font-size: 2.1rem; }
+  .container{ padding: 0 18px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior:auto !important; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loader" class="loader">
+  <div class="loader-inner">
+    <div class="loader-compass">
+      <div class="compass-needle"></div>
+    </div>
+    <p class="loader-text">Charting your path<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#home" class="brand">
+      <span class="brand-mark">OS</span>
+      <span class="brand-name">One Stop Personalized Career and Educational Advisor</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#dashboard-overview" class="nav-link">Dashboard</a>
+      <a href="#models" class="nav-link">Tools</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Toggle dark / light mode">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="4.6"/><g stroke-width="1.8"><line x1="12" y1="1.5" x2="12" y2="4.2"/><line x1="12" y1="19.8" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4.2" y2="12"/><line x1="19.8" y1="12" x2="22.5" y2="12"/><line x1="4.4" y1="4.4" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.6" y2="19.6"/><line x1="4.4" y1="19.6" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.6" y2="4.4"/></g></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20"><path d="M20.5 14.6A8.7 8.7 0 1 1 9.4 3.5a7 7 0 0 0 11.1 11.1z"/></svg>
+      </button>
+      <a href="#models" class="btn btn-primary nav-cta">Launch Tools</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <canvas id="heroCanvas" class="hero-canvas"></canvas>
+  <div class="hero-grid-overlay"></div>
+  <div class="hero-content">
+    <p class="eyebrow">Career &amp; Educational Intelligence Platform</p>
+    <h1 class="hero-title">Your future,<br><span class="gradient-text">plotted &amp; personalized.</span></h1>
+    <p class="hero-sub">One Stop Personalized Career and Educational Advisor blends real student data, subject-wise aptitude, and labour-market signals into eight working tools that turn "what should I do with my life" into an actual plan — careers, courses, colleges, skills, and a roadmap to get there.</p>
+    <div class="hero-actions">
+      <a href="#models" class="btn btn-primary btn-lg">Explore the 8 Tools</a>
+      <a href="#dashboard-overview" class="btn btn-ghost btn-lg">View Sample Dashboard</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num" data-target="12500" data-suffix="+">0</span>
+        <span class="stat-label">Students Guided</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="180" data-suffix="+">0</span>
+        <span class="stat-label">Career Paths Mapped</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="640" data-suffix="+">0</span>
+        <span class="stat-label">Colleges Indexed</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num" data-target="96" data-suffix="%">0</span>
+        <span class="stat-label">Match Satisfaction</span>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="scroll-cue" aria-label="Scroll down">
+    <span></span>
+  </a>
+</section>
+
+<!-- ABOUT -->
+<section class="section about" id="about">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">The Project</p>
+      <h2>One platform, every decision point of a student's career journey.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy">
+        <p>One Stop Personalized Career and Educational Advisor was built to solve a specific, recurring problem: students choose subjects, colleges, and careers on incomplete information — a relative's opinion, a trending job title, or whichever course a friend picked. This project replaces guesswork with a structured advisory pipeline.</p>
+        <p>Every module below runs entirely in your browser. Enter your marks, interests, and skills once, and each tool — recommendation engines, dashboards, and the PDF report generator — reads from that same profile to give consistent, explainable suggestions rather than a black-box score.</p>
+        <div class="about-pillars">
+          <div class="pillar">
+            <span class="pillar-num">01</span>
+            <h4>Assess</h4>
+            <p>Aptitude, interests, and current skill levels captured through short, honest self-ratings.</p>
+          </div>
+          <div class="pillar">
+            <span class="pillar-num">02</span>
+            <h4>Match</h4>
+            <p>Careers, courses, and colleges ranked against your profile using transparent scoring rules.</p>
+          </div>
+          <div class="pillar">
+            <span class="pillar-num">03</span>
+            <h4>Plan</h4>
+            <p>A generated roadmap and downloadable report you can act on or share with a mentor.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="orbit-card">
+          <div class="orbit-ring r1"></div>
+          <div class="orbit-ring r2"></div>
+          <div class="orbit-ring r3"></div>
+          <div class="orbit-center">You</div>
+          <span class="orbit-chip c1">Skills</span>
+          <span class="orbit-chip c2">Interests</span>
+          <span class="orbit-chip c3">Marks</span>
+          <span class="orbit-chip c4">Budget</span>
+          <span class="orbit-chip c5">Location</span>
+          <span class="orbit-chip c6">Goals</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section features" id="features">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Capabilities</p>
+      <h2>Everything a career-counselling office does — running client-side.</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon fi-1"></div>
+        <h3>AI-style Career Matching</h3>
+        <p>Rule-based scoring across interests, subjects and skills surfaces the closest-fit careers, ranked with a match percentage.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-2"></div>
+        <h3>Live Course &amp; College Data</h3>
+        <p>A built-in dataset of realistic courses and colleges filters instantly as you change stream, budget, or location.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-3"></div>
+        <h3>Skill Gap Visualization</h3>
+        <p>Compares your current skill levels against what your target career demands and lists exactly what to close first.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-4"></div>
+        <h3>Auto-generated Roadmaps</h3>
+        <p>A stage-by-stage timeline from "today" to "job-ready," tailored to the career you select.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-5"></div>
+        <h3>Analytics Dashboard</h3>
+        <p>Chart.js-powered breakdowns of career demand, salary bands, and skill distribution, updating with your inputs.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-6"></div>
+        <h3>One-click PDF Reports</h3>
+        <p>Generate a personalised, printable career report with jsPDF — no server, no sign-up, instant download.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-7"></div>
+        <h3>Dark / Light Mode</h3>
+        <p>A full theme system tuned for both late-night planning sessions and daylight review with a mentor.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon fi-8"></div>
+        <h3>Fully Responsive</h3>
+        <p>Every dashboard, chart, and form reflows cleanly from a 4K monitor down to a small phone screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD OVERVIEW -->
+<section class="section dashboard-overview" id="dashboard-overview">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Career Planning Dashboard</p>
+      <h2>Your profile, at a glance.</h2>
+      <p class="section-sub">This overview updates live as you use the tools below — it's the same profile object every module reads from.</p>
+    </div>
+    <div class="cpd-grid">
+      <div class="cpd-card cpd-profile">
+        <div class="cpd-avatar">AS</div>
+        <div>
+          <h4 id="cpdName">Aditi Sharma</h4>
+          <p class="muted">Class 12 · Science Stream · Coimbatore</p>
+          <div class="cpd-tags">
+            <span class="tag">Interest: Technology</span>
+            <span class="tag">Interest: Design</span>
+          </div>
+        </div>
+      </div>
+      <div class="cpd-card">
+        <p class="cpd-label">Top Career Match</p>
+        <h3 id="cpdTopCareer">Software Engineer</h3>
+        <div class="progress"><div class="progress-fill" id="cpdTopCareerBar" style="width:0%"></div></div>
+        <span class="cpd-percent" id="cpdTopCareerPct">0% match</span>
+      </div>
+      <div class="cpd-card">
+        <p class="cpd-label">Skill Readiness</p>
+        <h3 id="cpdReadiness">Building</h3>
+        <div class="progress"><div class="progress-fill progress-amber" id="cpdReadinessBar" style="width:0%"></div></div>
+        <span class="cpd-percent" id="cpdReadinessPct">0% ready</span>
+      </div>
+      <div class="cpd-card">
+        <p class="cpd-label">Roadmap Progress</p>
+        <h3 id="cpdRoadmapStage">Stage 1 of 4</h3>
+        <div class="progress"><div class="progress-fill progress-teal" id="cpdRoadmapBar" style="width:0%"></div></div>
+        <span class="cpd-percent" id="cpdRoadmapPct">Foundation</span>
+      </div>
+    </div>
+    <p class="dashboard-hint">Fill in the <strong>Career Recommendation</strong> and <strong>Skill Gap Analysis</strong> tools below to personalise every card above.</p>
+  </div>
+</section>
+
+<!-- MODELS SECTION HEADER -->
+<section class="section-tools-intro" id="models">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Interactive Working Models</p>
+      <h2>Eight tools. One profile. Real output.</h2>
+      <p class="section-sub">Each panel is fully functional — type real information and get calculated, non-random results.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 1: CAREER RECOMMENDATION -->
+<section class="section model-section" id="model1">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">01</span>
+      <div>
+        <h2>Career Recommendation System</h2>
+        <p class="section-sub">Rate your interests and strongest skills — we score them against 10 real career profiles.</p>
+      </div>
+    </div>
+    <div class="model-panel two-col">
+      <form class="model-form" id="careerForm">
+        <div class="form-row">
+          <label>Your Name</label>
+          <input type="text" id="c_name" placeholder="e.g. Aditi Sharma" value="Aditi Sharma">
+        </div>
+        <div class="form-row two">
+          <div>
+            <label>Academic Stream</label>
+            <select id="c_stream">
+              <option value="Science">Science (PCM/PCB)</option>
+              <option value="Commerce">Commerce</option>
+              <option value="Arts">Arts / Humanities</option>
+            </select>
+          </div>
+          <div>
+            <label>Class 12 / Latest Score (%)</label>
+            <input type="number" id="c_score" min="0" max="100" value="88">
+          </div>
+        </div>
+        <label>Rate your interests</label>
+        <div class="slider-grid" id="interestSliders"></div>
+        <label>Rate your skills</label>
+        <div class="slider-grid" id="skillSliders"></div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Get Career Matches</button>
+          <button type="button" class="btn btn-ghost" id="careerReset">Reset</button>
+        </div>
+      </form>
+      <div class="model-results" id="careerResults">
+        <div class="empty-state">
+          <div class="empty-icon">🎯</div>
+          <p>Your ranked career matches will appear here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 2: COURSE RECOMMENDATION -->
+<section class="section model-section alt" id="model2">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">02</span>
+      <div>
+        <h2>Course Recommendation</h2>
+        <p class="section-sub">Pick a career (or let your top match auto-fill) to see matching degree courses.</p>
+      </div>
+    </div>
+    <div class="model-panel">
+      <div class="inline-controls">
+        <label for="courseCareerSelect">Target Career</label>
+        <select id="courseCareerSelect"></select>
+        <button class="btn btn-ghost btn-sm" id="courseUseTop">Use My Top Match</button>
+      </div>
+      <div class="course-grid" id="courseGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 3: COLLEGE RECOMMENDATION -->
+<section class="section model-section" id="model3">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">03</span>
+      <div>
+        <h2>College Recommendation</h2>
+        <p class="section-sub">Filter a growing database of Indian colleges by stream, budget, and city.</p>
+      </div>
+    </div>
+    <div class="model-panel">
+      <div class="filter-bar">
+        <div>
+          <label>Stream</label>
+          <select id="collegeStream">
+            <option value="all">All Streams</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Medical">Medical</option>
+            <option value="Commerce">Commerce &amp; Management</option>
+            <option value="Design">Design &amp; Arts</option>
+            <option value="Law">Law</option>
+          </select>
+        </div>
+        <div>
+          <label>Max Annual Fees (₹)</label>
+          <input type="range" id="collegeBudget" min="20000" max="2500000" step="10000" value="2500000">
+          <span id="collegeBudgetVal">₹25,00,000</span>
+        </div>
+        <div>
+          <label>City</label>
+          <input type="text" id="collegeCity" list="collegeCityList" placeholder="Type a city, e.g. Chennai" autocomplete="off">
+          <datalist id="collegeCityList"></datalist>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="collegeReset">Reset Filters</button>
+      </div>
+      <div class="college-grid" id="collegeGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- College Ratings Modal (used only by College Recommendation) -->
+<div class="college-modal-overlay" id="collegeModalOverlay">
+  <div class="college-modal" id="collegeModal">
+    <button class="college-modal-close" id="collegeModalClose" aria-label="Close">✕</button>
+    <div id="collegeModalBody"></div>
+  </div>
+</div>
+
+<!-- MODEL 4: SKILL GAP ANALYSIS -->
+<section class="section model-section alt" id="model4">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">04</span>
+      <div>
+        <h2>Skill Gap Analysis</h2>
+        <p class="section-sub">Compare your current skills against what your chosen career actually requires.</p>
+      </div>
+    </div>
+    <div class="model-panel two-col">
+      <div class="model-form">
+        <label for="gapCareerSelect">Target Career</label>
+        <select id="gapCareerSelect"></select>
+        <div id="gapSliderContainer" class="slider-grid"></div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="gapAnalyzeBtn">Analyze Gap</button>
+          <button class="btn btn-ghost" id="gapReset">Reset</button>
+        </div>
+      </div>
+      <div class="model-results">
+        <canvas id="gapChart" height="260"></canvas>
+        <div id="gapList" class="gap-list"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 5: CAREER ROADMAP GENERATOR -->
+<section class="section model-section" id="model5">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">05</span>
+      <div>
+        <h2>Career Roadmap Generator</h2>
+        <p class="section-sub">Generate a stage-by-stage plan — from where you are now to being job-ready.</p>
+      </div>
+    </div>
+    <div class="model-panel">
+      <div class="inline-controls">
+        <label for="roadmapCareerSelect">Career</label>
+        <select id="roadmapCareerSelect"></select>
+        <label for="roadmapYear">Current Year</label>
+        <select id="roadmapYear">
+          <option value="school">In School (Class 11–12)</option>
+          <option value="year1">College Year 1</option>
+          <option value="year2">College Year 2</option>
+          <option value="year3">College Year 3+</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="roadmapGenBtn">Generate Roadmap</button>
+        <button class="btn btn-ghost btn-sm" id="roadmapReset">Reset</button>
+      </div>
+      <div class="timeline" id="roadmapTimeline">
+        <div class="empty-state">
+          <div class="empty-icon">🗺️</div>
+          <p>Choose a career and generate your roadmap.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 6: STUDENT DASHBOARD -->
+<section class="section model-section alt" id="model6">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">06</span>
+      <div>
+        <h2>Student Dashboard</h2>
+        <p class="section-sub">A live personal dashboard summarising your academics, activity, and goals.</p>
+      </div>
+    </div>
+    <div class="model-panel">
+      <div class="student-dash">
+        <div class="sd-form">
+          <div class="form-row two">
+            <div><label>Attendance (%)</label><input type="number" id="sd_attendance" min="0" max="100" value="92"></div>
+            <div><label>Avg. Test Score (%)</label><input type="number" id="sd_score" min="0" max="100" value="85"></div>
+          </div>
+          <div class="form-row two">
+            <div><label>Study Hours / Week</label><input type="number" id="sd_hours" min="0" max="80" value="18"></div>
+            <div><label>Extracurriculars Joined</label><input type="number" id="sd_extra" min="0" max="20" value="3"></div>
+          </div>
+          <div class="form-row">
+            <label>Primary Goal</label>
+            <input type="text" id="sd_goal" value="Crack a top engineering entrance exam">
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="sdUpdateBtn">Update Dashboard</button>
+            <button class="btn btn-ghost" id="sdReset">Reset</button>
+          </div>
+        </div>
+        <div class="sd-cards" id="sdCards"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 7: ANALYTICS DASHBOARD -->
+<section class="section model-section" id="model7">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">07</span>
+      <div>
+        <h2>Analytics Dashboard</h2>
+        <p class="section-sub">Market-level analytics built with Chart.js — hover for values, filter by stream.</p>
+      </div>
+    </div>
+    <div class="model-panel">
+      <div class="inline-controls">
+        <label for="analyticsStream">Stream Filter</label>
+        <select id="analyticsStream">
+          <option value="all">All Streams</option>
+          <option value="Science">Science</option>
+          <option value="Commerce">Commerce</option>
+          <option value="Arts">Arts</option>
+        </select>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h4>Career Demand Index (0–100)</h4>
+          <canvas id="chartDemand"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4>Average Starting Salary (₹ LPA)</h4>
+          <canvas id="chartSalary"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4>Your Skill Distribution</h4>
+          <canvas id="chartSkills"></canvas>
+        </div>
+        <div class="chart-card">
+          <h4>5-Year Growth Outlook (%)</h4>
+          <canvas id="chartGrowth"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODEL 8: CAREER REPORT GENERATOR -->
+<section class="section model-section alt" id="model8">
+  <div class="container">
+    <div class="model-header">
+      <span class="model-index">08</span>
+      <div>
+        <h2>Career Report Generator</h2>
+        <p class="section-sub">Compile your profile, top matches, skill gaps, and roadmap into a downloadable PDF.</p>
+      </div>
+    </div>
+    <div class="model-panel report-panel">
+      <div class="report-preview" id="reportPreview">
+        <div class="empty-state">
+          <div class="empty-icon">📄</div>
+          <p>Run the Career Recommendation and Skill Gap tools first, then generate your report.</p>
+        </div>
+      </div>
+      <div class="report-actions">
+        <button class="btn btn-primary btn-lg" id="generateReportBtn">Generate &amp; Download PDF</button>
+        <button class="btn btn-ghost" id="reportReset">Reset Report</button>
+        <p class="muted small">Powered by jsPDF — the file is created entirely in your browser.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">FAQ</p>
+      <h2>Common questions from students and parents.</h2>
+    </div>
+    <div class="faq-list" id="faqList"></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <p class="eyebrow">Get in Touch</p>
+      <h2>Talk to a counsellor about your results.</h2>
+      <p>Send us your questions about any of the eight tools, a college shortlist, or your generated report — a real advisor will follow up.</p>
+      <ul class="contact-details">
+        <li><strong>Email:</strong> advisors@pathfolio.app</li>
+        <li><strong>Phone:</strong> +91 98765 43210</li>
+        <li><strong>Office:</strong> Race Course Road, Coimbatore, Tamil Nadu, India</li>
+      </ul>
+    </div>
+    <form class="contact-form" id="contactForm">
+      <div class="form-row two">
+        <div><label>Full Name</label><input type="text" id="ct_name" required placeholder="Your name"></div>
+        <div><label>Email</label><input type="email" id="ct_email" required placeholder="you@example.com"></div>
+      </div>
+      <div class="form-row">
+        <label>Subject</label>
+        <select id="ct_subject">
+          <option>Career Recommendation Query</option>
+          <option>College Shortlisting Help</option>
+          <option>Skill Gap Guidance</option>
+          <option>Technical Issue</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Message</label>
+        <textarea id="ct_message" rows="4" required placeholder="Tell us what you'd like help with..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+      <p class="form-status" id="contactStatus"></p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="brand">
+        <span class="brand-mark">OS</span>
+        <span class="brand-name">One Stop Personalized Career and Educational Advisor</span>
+      </a>
+      <p>Helping students choose careers and colleges with data, not guesswork.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Twitter">𝕏</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="YouTube">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Tools</h5>
+      <a href="#model1">Career Recommendation</a>
+      <a href="#model2">Course Recommendation</a>
+      <a href="#model3">College Recommendation</a>
+      <a href="#model4">Skill Gap Analysis</a>
+      <a href="#model5">Roadmap Generator</a>
+    </div>
+    <div class="footer-col">
+      <h5>Platform</h5>
+      <a href="#model6">Student Dashboard</a>
+      <a href="#model7">Analytics Dashboard</a>
+      <a href="#model8">Report Generator</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="#about">About the Project</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 One Stop Personalized Career and Educational Advisor. Built as an educational demo — all data is illustrative.</p>
+    <p>Made for students who deserve a real plan.</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
+
+<!-- Chart.js and jsPDF are loaded dynamically by script.js (with multi-CDN fallback)
+     so there is only ONE loading path for each library — no duplicate imports. -->
+<script>
+/* =========================================================
+   PATHFOLIO — script.js
+   All data + all interactive logic. No backend required.
+   ========================================================= */
+
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------
+   LIBRARY LOADER — loads Chart.js & jsPDF in the background
+   with multi-CDN fallback AND a timeout, so a blocked/slow
+   CDN can never freeze the rest of the site. Only the chart
+   and PDF features wait on this — everything else (career
+   recommendation, courses, colleges, roadmap, dashboards,
+   forms) initializes immediately, independent of network.
+--------------------------------------------------------- */
+function loadScriptOnce(src, timeoutMs){
+  return new Promise((resolve, reject)=>{
+    const existing = document.querySelector(`script[data-lib-src="${src}"]`);
+    let settled = false;
+    const done = (ok)=>{ if(settled) return; settled = true; ok ? resolve() : reject(new Error("load failed: "+src)); };
+
+    if(existing){
+      if(existing.dataset.loaded === "true"){ done(true); return; }
+      existing.addEventListener("load", ()=>done(true));
+      existing.addEventListener("error", ()=>done(false));
+      setTimeout(()=>done(false), timeoutMs);
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = src;
+    s.dataset.libSrc = src;
+    s.onload = ()=>{ s.dataset.loaded = "true"; done(true); };
+    s.onerror = ()=> done(false);
+    document.head.appendChild(s);
+    // Safety net: some ad-blockers / firewalls swallow the request
+    // without ever firing load or error — never let that hang forever.
+    setTimeout(()=>done(false), timeoutMs);
+  });
+}
+
+async function ensureLibrary(globalCheck, sources, timeoutMs){
+  if(globalCheck()) return true;
+  for(const src of sources){
+    try{
+      await loadScriptOnce(src, timeoutMs);
+      if(globalCheck()) return true;
+    }catch(err){
+      console.warn("Library source failed, trying next:", src);
+    }
+  }
+  return globalCheck();
+}
+
+const CHART_SOURCES = [
+  "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js",
+  "https://unpkg.com/chart.js@4.4.4/dist/chart.umd.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+];
+const JSPDF_SOURCES = [
+  "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js",
+  "https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js",
+  "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+];
+
+let chartReady = false;
+let jsPDFReady = false;
+
+/* Runs in the background. Resolves chartReady/jsPDFReady whenever
+   the libraries arrive (or gives up after the timeout) — it never
+   blocks the rest of the app from initializing. */
+async function initLibraries(){
+  const [chartOk, pdfOk] = await Promise.all([
+    ensureLibrary(()=> typeof window.Chart !== "undefined", CHART_SOURCES, 6000),
+    ensureLibrary(()=> typeof window.jspdf !== "undefined", JSPDF_SOURCES, 6000)
+  ]);
+  chartReady = chartOk;
+  jsPDFReady = pdfOk;
+  if(!chartReady) console.error("Chart.js could not be loaded from any CDN source.");
+  if(!jsPDFReady) console.error("jsPDF could not be loaded from any CDN source.");
+  // Charts that were requested before the library arrived get drawn now.
+  if(chartReady && typeof buildAnalyticsCharts === "function") buildAnalyticsCharts();
+}
+initLibraries();
+
+/* ---------------------------------------------------------
+   0. DATA
+--------------------------------------------------------- */
+
+const INTEREST_KEYS = [
+  { key:"tech",      label:"Technology & Computers" },
+  { key:"creativity",label:"Creativity & Design" },
+  { key:"science",   label:"Science & Research" },
+  { key:"business",  label:"Business & Finance" },
+  { key:"helping",   label:"Helping People" },
+  { key:"leadership",label:"Leadership & Public Speaking" }
+];
+
+const SKILL_KEYS = [
+  { key:"coding",      label:"Coding / Programming" },
+  { key:"math",        label:"Mathematics" },
+  { key:"communication",label:"Communication" },
+  { key:"problem",     label:"Problem Solving" },
+  { key:"design",      label:"Design / Creativity" },
+  { key:"leadership",  label:"Leadership" }
+];
+
+const CAREERS = [
+  {
+    id:"swe", name:"Software Engineer", stream:"Science",
+    description:"Designs, builds and maintains applications and systems software across web, mobile and cloud platforms.",
+    interests:{tech:9,creativity:5,science:6,business:3,helping:3,leadership:4},
+    skills:{coding:9,math:6,communication:5,problem:9,design:4,leadership:4},
+    salary:8, growth:22, demand:92,
+    roadmap:[
+      {title:"Build Programming Foundations", tasks:["Learn Python or Java fundamentals","Solve 100+ basic problems on data structures","Build 2 small console projects"]},
+      {title:"Go Deeper into CS Core", tasks:["Study DSA (arrays, trees, graphs)","Learn Git, SQL and Linux basics","Contribute to one open-source repo"]},
+      {title:"Specialize & Build Projects", tasks:["Pick web, mobile or ML as a track","Build 3 portfolio-grade projects","Do at least 2 internships"]},
+      {title:"Get Job Ready", tasks:["Practice mock technical interviews","Polish your resume and GitHub","Apply to 20+ targeted roles"]}
+    ]
+  },
+  {
+    id:"ds", name:"Data Scientist", stream:"Science",
+    description:"Extracts insights from data using statistics, machine learning and visualization to guide business decisions.",
+    interests:{tech:8,creativity:4,science:9,business:6,helping:3,leadership:4},
+    skills:{coding:8,math:9,communication:5,problem:9,design:3,leadership:4},
+    salary:10, growth:28, demand:90,
+    roadmap:[
+      {title:"Build Math & Stats Base", tasks:["Learn probability & statistics","Learn linear algebra basics","Start Python for data analysis"]},
+      {title:"Learn the Data Stack", tasks:["Master Pandas, NumPy, SQL","Learn data visualization (Matplotlib/PowerBI)","Complete 2 guided data projects"]},
+      {title:"Machine Learning Depth", tasks:["Study supervised & unsupervised ML","Build 3 end-to-end ML projects","Enter a Kaggle-style competition"]},
+      {title:"Get Job Ready", tasks:["Build a case-study portfolio","Practice SQL & ML interview rounds","Apply for analyst/DS internships"]}
+    ]
+  },
+  {
+    id:"doc", name:"Doctor (MBBS)", stream:"Science",
+    description:"Diagnoses and treats patients, working in hospitals or private practice across general or specialised medicine.",
+    interests:{tech:3,creativity:2,science:9,business:2,helping:10,leadership:6},
+    skills:{coding:1,math:6,communication:8,problem:8,design:2,leadership:6},
+    salary:12, growth:15, demand:85,
+    roadmap:[
+      {title:"NEET Preparation", tasks:["Master NCERT Physics, Chemistry, Biology","Take weekly mock NEET tests","Join a structured coaching program"]},
+      {title:"Crack MBBS Admission", tasks:["Score competitively in NEET","Shortlist colleges via counselling rank","Secure MBBS seat"]},
+      {title:"Clinical Foundation", tasks:["Complete pre-clinical & para-clinical years","Do ward postings & clinical rotations","Pass university examinations"]},
+      {title:"Internship & Specialization", tasks:["Complete 1-year compulsory internship","Prepare for NEET-PG","Choose a specialization (MD/MS)"]}
+    ]
+  },
+  {
+    id:"mech", name:"Mechanical Engineer", stream:"Science",
+    description:"Designs and tests mechanical systems — from automotive parts to industrial machinery and robotics.",
+    interests:{tech:7,creativity:5,science:8,business:3,helping:3,leadership:4},
+    skills:{coding:4,math:8,communication:5,problem:8,design:6,leadership:4},
+    salary:6, growth:10, demand:68,
+    roadmap:[
+      {title:"Core Engineering Basics", tasks:["Strengthen Physics & Math fundamentals","Learn engineering drawing basics","Understand thermodynamics concepts"]},
+      {title:"Technical Tools", tasks:["Learn CAD tools (AutoCAD/SolidWorks)","Study mechanics of materials","Join a robotics or design club"]},
+      {title:"Hands-on Projects", tasks:["Build 2 mechanical design projects","Do a manufacturing plant internship","Learn CAM/CNC basics"]},
+      {title:"Get Job Ready", tasks:["Prepare for core company interviews (GATE if PG)","Build a project portfolio","Apply to core & design roles"]}
+    ]
+  },
+  {
+    id:"ca", name:"Chartered Accountant", stream:"Commerce",
+    description:"Manages accounting, auditing, taxation and financial strategy for businesses and individuals.",
+    interests:{tech:3,creativity:2,science:3,business:10,helping:3,leadership:5},
+    skills:{coding:1,math:8,communication:6,problem:7,design:1,leadership:5},
+    salary:9, growth:12, demand:75,
+    roadmap:[
+      {title:"CA Foundation", tasks:["Register with ICAI after Class 12","Study accounting, law & economics basics","Clear CA Foundation exam"]},
+      {title:"CA Intermediate", tasks:["Complete both groups of Intermediate","Start 3-year Articleship training","Learn practical audit & tax work"]},
+      {title:"CA Final Preparation", tasks:["Cover advanced auditing & financial reporting","Take mock tests regularly","Balance articleship with self-study"]},
+      {title:"Qualify & Specialize", tasks:["Clear CA Final examination","Choose a specialization (audit, tax, M&A)","Join a firm or start practice"]}
+    ]
+  },
+  {
+    id:"design", name:"Graphic Designer", stream:"Arts",
+    description:"Creates visual concepts for branding, digital products, and print media using design software and typography.",
+    interests:{tech:4,creativity:10,science:2,business:4,helping:2,leadership:3},
+    skills:{coding:2,math:2,communication:5,problem:5,design:9,leadership:3},
+    salary:5, growth:14, demand:70,
+    roadmap:[
+      {title:"Design Fundamentals", tasks:["Learn color theory & typography","Practice with Adobe Photoshop/Illustrator","Study composition and layout"]},
+      {title:"Build a Style", tasks:["Create 15+ practice design pieces","Learn Figma for UI basics","Get feedback from design communities"]},
+      {title:"Real Projects", tasks:["Freelance for 3 small clients","Build a branding case study","Learn motion graphics basics"]},
+      {title:"Get Job Ready", tasks:["Build an online portfolio site","Apply to agencies & in-house teams","Negotiate freelance/full-time offers"]}
+    ]
+  },
+  {
+    id:"civil", name:"Civil Engineer", stream:"Science",
+    description:"Plans, designs and oversees construction of infrastructure like buildings, roads, and bridges.",
+    interests:{tech:5,creativity:4,science:7,business:4,helping:5,leadership:5},
+    skills:{coding:2,math:8,communication:5,problem:7,design:5,leadership:5},
+    salary:6, growth:9, demand:62,
+    roadmap:[
+      {title:"Core Foundations", tasks:["Strengthen Math & Physics","Learn engineering drawing & surveying basics","Understand structural analysis basics"]},
+      {title:"Technical Tools", tasks:["Learn AutoCAD & STAAD Pro","Study concrete & steel design","Visit active construction sites"]},
+      {title:"Site Experience", tasks:["Complete a site engineering internship","Assist in a real design project","Learn project estimation & billing"]},
+      {title:"Get Job Ready", tasks:["Prepare for GATE (if going for PG)","Build a design project portfolio","Apply to construction & consulting firms"]}
+    ]
+  },
+  {
+    id:"marketing", name:"Digital Marketer", stream:"Commerce",
+    description:"Plans and runs online campaigns across SEO, social media, and paid ads to grow brands and revenue.",
+    interests:{tech:6,creativity:8,science:2,business:8,helping:3,leadership:5},
+    skills:{coding:3,math:4,communication:8,problem:6,design:6,leadership:5},
+    salary:6, growth:20, demand:80,
+    roadmap:[
+      {title:"Marketing Foundations", tasks:["Learn marketing fundamentals & consumer behaviour","Understand SEO and content basics","Start a personal blog or social page"]},
+      {title:"Tools & Certifications", tasks:["Get Google & Meta ads certified","Learn analytics tools (GA4)","Run a small ad campaign with real budget"]},
+      {title:"Real Campaigns", tasks:["Manage a brand's social media for 3 months","A/B test ad creatives and copy","Track ROI and optimize campaigns"]},
+      {title:"Get Job Ready", tasks:["Build a campaign results portfolio","Apply to agencies & D2C brands","Negotiate roles with performance data"]}
+    ]
+  },
+  {
+    id:"lawyer", name:"Lawyer", stream:"Arts",
+    description:"Advises clients and represents them in legal matters spanning corporate, criminal, or civil law.",
+    interests:{tech:2,creativity:4,science:2,business:6,helping:6,leadership:8},
+    skills:{coding:1,math:3,communication:9,problem:8,design:1,leadership:7},
+    salary:8, growth:11, demand:65,
+    roadmap:[
+      {title:"CLAT / Entrance Prep", tasks:["Study legal reasoning & GK","Take mock CLAT/entrance tests","Read landmark judgments regularly"]},
+      {title:"Law School Foundations", tasks:["Join a 5-year integrated LLB program","Participate in moot court competitions","Intern with a local law firm"]},
+      {title:"Specialize", tasks:["Choose corporate, criminal or civil track","Intern with litigation or corporate firms","Publish a research paper or article"]},
+      {title:"Get Job Ready", tasks:["Register with the Bar Council","Apply to law firms or prepare for judiciary exams","Build a case-brief portfolio"]}
+    ]
+  },
+  {
+    id:"psych", name:"Psychologist", stream:"Arts",
+    description:"Studies human behaviour and mental processes to counsel individuals or conduct behavioural research.",
+    interests:{tech:2,creativity:4,science:5,business:2,helping:10,leadership:5},
+    skills:{coding:1,math:3,communication:9,problem:6,design:2,leadership:4},
+    salary:5, growth:18, demand:72,
+    roadmap:[
+      {title:"Undergraduate Foundations", tasks:["Pursue BA/BSc Psychology","Study core theories (cognitive, social, developmental)","Volunteer at a counselling helpline"]},
+      {title:"Specialize", tasks:["Pursue MA in Clinical/Counselling Psychology","Complete supervised clinical hours","Learn assessment tools (tests, scales)"]},
+      {title:"Licensure", tasks:["Register with RCI (Rehabilitation Council of India)","Complete an M.Phil if pursuing clinical practice","Do supervised practicum work"]},
+      {title:"Get Job Ready", tasks:["Join a clinic, hospital or start practice","Keep up continuing education","Build client-case experience (ethically)"]}
+    ]
+  }
+];
+
+const COURSE_MAP = {
+  swe:[
+    {name:"B.Tech Computer Science & Engineering", provider:"IIT / NIT / State Universities", duration:"4 Years", level:"Undergraduate", desc:"Core computer science degree covering DSA, OS, networks, and software engineering."},
+    {name:"BCA (Bachelor of Computer Applications)", provider:"Autonomous & State Colleges", duration:"3 Years", level:"Undergraduate", desc:"Application-focused computing degree, faster route into software roles."},
+    {name:"Full Stack Web Development Certification", provider:"Industry Bootcamps", duration:"6 Months", level:"Certification", desc:"Intensive, project-based training in front-end and back-end web development."}
+  ],
+  ds:[
+    {name:"B.Tech + M.Sc in Data Science", provider:"IIT / IIIT Consortium", duration:"5 Years", level:"Integrated", desc:"Combines core engineering with advanced statistics and machine learning."},
+    {name:"PG Diploma in Data Science", provider:"IIIT Bangalore / ISI", duration:"11 Months", level:"Postgraduate Diploma", desc:"Applied program in Python, ML, and big data tools for working professionals."},
+    {name:"Data Science Specialization", provider:"Online Certification Track", duration:"6 Months", level:"Certification", desc:"Self-paced modules in statistics, ML, and data visualization with capstone projects."}
+  ],
+  doc:[
+    {name:"MBBS (Bachelor of Medicine & Surgery)", provider:"AIIMS / Government & Private Medical Colleges", duration:"5.5 Years", level:"Undergraduate", desc:"Primary medical degree including 1-year compulsory rotating internship."},
+    {name:"NEET Foundation & Coaching Track", provider:"Integrated Coaching Institutes", duration:"2 Years (Class 11-12)", level:"Entrance Prep", desc:"Structured PCB coaching aligned with school curriculum for NEET-UG."},
+    {name:"MD / MS Specialization", provider:"Post-MBBS Programs", duration:"3 Years", level:"Postgraduate", desc:"Specialization after MBBS via NEET-PG in fields like medicine, surgery, paediatrics."}
+  ],
+  mech:[
+    {name:"B.Tech Mechanical Engineering", provider:"IIT / NIT / State Universities", duration:"4 Years", level:"Undergraduate", desc:"Covers thermodynamics, design, manufacturing, and robotics fundamentals."},
+    {name:"Diploma in Mechanical Engineering", provider:"Polytechnic Institutes", duration:"3 Years", level:"Diploma", desc:"Practical route with lateral entry option into 2nd year B.Tech."},
+    {name:"CAD/CAM & Robotics Certification", provider:"Industry Training Centers", duration:"4 Months", level:"Certification", desc:"Hands-on training in SolidWorks, AutoCAD, and automation tools."}
+  ],
+  ca:[
+    {name:"CA Foundation → Intermediate → Final", provider:"ICAI (Institute of Chartered Accountants of India)", duration:"~4-5 Years", level:"Professional", desc:"The complete chartered accountancy qualification path with articleship."},
+    {name:"B.Com (Hons)", provider:"SRCC / Christ / State Universities", duration:"3 Years", level:"Undergraduate", desc:"Foundational commerce degree often pursued alongside CA levels."},
+    {name:"CMA (Cost & Management Accounting)", provider:"ICMAI", duration:"~3 Years", level:"Professional", desc:"Alternate/complementary path focused on cost & management accounting."}
+  ],
+  design:[
+    {name:"B.Des (Bachelor of Design)", provider:"NID / NIFT / Pearl Academy", duration:"4 Years", level:"Undergraduate", desc:"Comprehensive design education across visual communication and product design."},
+    {name:"Diploma in Graphic Design", provider:"Private Design Institutes", duration:"1 Year", level:"Diploma", desc:"Fast-track, portfolio-focused training in visual design tools and principles."},
+    {name:"UI/UX Design Certification", provider:"Industry Certification Programs", duration:"5 Months", level:"Certification", desc:"Focused training on user research, wireframing, and prototyping for digital products."}
+  ],
+  civil:[
+    {name:"B.Tech Civil Engineering", provider:"IIT / NIT / State Universities", duration:"4 Years", level:"Undergraduate", desc:"Covers structural design, geotechnical, transportation, and construction management."},
+    {name:"Diploma in Civil Engineering", provider:"Polytechnic Institutes", duration:"3 Years", level:"Diploma", desc:"Practical construction and site-management focused diploma with lateral entry option."},
+    {name:"Structural Design & STAAD Pro Certification", provider:"Industry Training Centers", duration:"3 Months", level:"Certification", desc:"Specialized training in structural analysis software used across the industry."}
+  ],
+  marketing:[
+    {name:"BBA in Marketing", provider:"Christ University / NMIMS / State Universities", duration:"3 Years", level:"Undergraduate", desc:"Business foundation with a marketing specialization track."},
+    {name:"Google & Meta Digital Marketing Certificates", provider:"Google / Meta Blueprint", duration:"3-4 Months", level:"Certification", desc:"Industry-recognized certification in search, social, and analytics tools."},
+    {name:"Performance Marketing Bootcamp", provider:"Industry Bootcamps", duration:"4 Months", level:"Certification", desc:"Hands-on training running and optimizing real ad campaigns with budgets."}
+  ],
+  lawyer:[
+    {name:"BA LLB (Integrated)", provider:"NLSIU / NALSAR / Symbiosis Law School", duration:"5 Years", level:"Integrated Undergraduate", desc:"Combines humanities with core legal education straight after Class 12."},
+    {name:"LLB (3-Year)", provider:"State Law Colleges", duration:"3 Years", level:"Undergraduate", desc:"Standard law degree pursued after completing any bachelor's degree."},
+    {name:"CLAT Coaching Track", provider:"Integrated Coaching Institutes", duration:"1-2 Years", level:"Entrance Prep", desc:"Structured preparation for national law entrance examinations."}
+  ],
+  psych:[
+    {name:"BA/BSc Psychology (Hons)", provider:"Christ University / Delhi University", duration:"3 Years", level:"Undergraduate", desc:"Foundational study of cognitive, social, and developmental psychology."},
+    {name:"MA Clinical/Counselling Psychology", provider:"TISS / Christ University", duration:"2 Years", level:"Postgraduate", desc:"Specialized training with supervised clinical practicum hours."},
+    {name:"RCI Licensure & M.Phil Clinical Psychology", provider:"Rehabilitation Council of India accredited institutes", duration:"2 Years", level:"Professional Licensure", desc:"Required path to practice as a licensed clinical psychologist in India."}
+  ]
+};
+
+const COLLEGES = [
+  // Engineering
+  {name:"IIT Madras", city:"Chennai", stream:"Engineering", fees:250000, rating:4.9},
+  {name:"IIT Bombay", city:"Mumbai", stream:"Engineering", fees:260000, rating:4.9},
+  {name:"IIT Delhi", city:"Delhi", stream:"Engineering", fees:255000, rating:4.9},
+  {name:"IIT Kanpur", city:"Kanpur", stream:"Engineering", fees:250000, rating:4.8},
+  {name:"IIT Kharagpur", city:"Kharagpur", stream:"Engineering", fees:250000, rating:4.8},
+  {name:"IIT Roorkee", city:"Roorkee", stream:"Engineering", fees:245000, rating:4.7},
+  {name:"IIT Hyderabad", city:"Hyderabad", stream:"Engineering", fees:250000, rating:4.7},
+  {name:"NIT Tiruchirappalli", city:"Tiruchirappalli", stream:"Engineering", fees:180000, rating:4.6},
+  {name:"NIT Surathkal", city:"Mangaluru", stream:"Engineering", fees:175000, rating:4.6},
+  {name:"NIT Warangal", city:"Warangal", stream:"Engineering", fees:175000, rating:4.6},
+  {name:"BITS Pilani", city:"Pilani", stream:"Engineering", fees:480000, rating:4.6},
+  {name:"VIT Vellore", city:"Vellore", stream:"Engineering", fees:220000, rating:4.3},
+  {name:"SRM Institute of Science & Technology", city:"Chennai", stream:"Engineering", fees:275000, rating:4.1},
+  {name:"PSG College of Technology", city:"Coimbatore", stream:"Engineering", fees:150000, rating:4.4},
+  {name:"Coimbatore Institute of Technology", city:"Coimbatore", stream:"Engineering", fees:120000, rating:4.2},
+  {name:"Manipal Institute of Technology", city:"Manipal", stream:"Engineering", fees:450000, rating:4.3},
+  {name:"Anna University", city:"Chennai", stream:"Engineering", fees:65000, rating:4.2},
+  {name:"Jadavpur University", city:"Kolkata", stream:"Engineering", fees:20000, rating:4.5},
+  {name:"Delhi Technological University", city:"Delhi", stream:"Engineering", fees:160000, rating:4.4},
+  {name:"COEP Technological University", city:"Pune", stream:"Engineering", fees:95000, rating:4.4},
+
+  // Medical
+  {name:"AIIMS Delhi", city:"Delhi", stream:"Medical", fees:6000, rating:4.9},
+  {name:"CMC Vellore", city:"Vellore", stream:"Medical", fees:50000, rating:4.8},
+  {name:"JIPMER", city:"Puducherry", stream:"Medical", fees:8000, rating:4.7},
+  {name:"AIIMS Rishikesh", city:"Rishikesh", stream:"Medical", fees:7000, rating:4.7},
+  {name:"Madras Medical College", city:"Chennai", stream:"Medical", fees:15000, rating:4.7},
+  {name:"KMC Manipal", city:"Manipal", stream:"Medical", fees:1200000, rating:4.5},
+  {name:"Grant Medical College", city:"Mumbai", stream:"Medical", fees:20000, rating:4.6},
+  {name:"AFMC Pune", city:"Pune", stream:"Medical", fees:12000, rating:4.8},
+  {name:"SRM Medical College", city:"Chennai", stream:"Medical", fees:1800000, rating:4.0},
+  {name:"Kasturba Medical College", city:"Mangaluru", stream:"Medical", fees:1300000, rating:4.4},
+
+  // Commerce & Management
+  {name:"Shri Ram College of Commerce", city:"Delhi", stream:"Commerce", fees:40000, rating:4.7},
+  {name:"Christ University", city:"Bengaluru", stream:"Commerce", fees:180000, rating:4.3},
+  {name:"Loyola College", city:"Chennai", stream:"Commerce", fees:60000, rating:4.5},
+  {name:"St. Xavier's College", city:"Mumbai", stream:"Commerce", fees:35000, rating:4.5},
+  {name:"Narsee Monjee College", city:"Mumbai", stream:"Commerce", fees:55000, rating:4.4},
+  {name:"Symbiosis Institute of Business Management", city:"Pune", stream:"Commerce", fees:1100000, rating:4.4},
+  {name:"NMIMS", city:"Mumbai", stream:"Commerce", fees:950000, rating:4.3},
+  {name:"IIM Ahmedabad", city:"Ahmedabad", stream:"Commerce", fees:2500000, rating:4.9},
+  {name:"IIM Bangalore", city:"Bengaluru", stream:"Commerce", fees:2400000, rating:4.9},
+  {name:"Loyola College of Business Admin", city:"Chennai", stream:"Commerce", fees:70000, rating:4.3},
+
+  // Design & Arts
+  {name:"NIFT Delhi", city:"Delhi", stream:"Design", fees:250000, rating:4.6},
+  {name:"NIFT Chennai", city:"Chennai", stream:"Design", fees:230000, rating:4.4},
+  {name:"National Institute of Design", city:"Ahmedabad", stream:"Design", fees:400000, rating:4.8},
+  {name:"Pearl Academy", city:"Delhi", stream:"Design", fees:350000, rating:4.1},
+  {name:"MIT Institute of Design", city:"Pune", stream:"Design", fees:380000, rating:4.2},
+  {name:"Srishti Manipal Institute of Art", city:"Bengaluru", stream:"Design", fees:420000, rating:4.3},
+
+  // Law
+  {name:"National Law School (NLSIU)", city:"Bengaluru", stream:"Law", fees:250000, rating:4.9},
+  {name:"NALSAR University of Law", city:"Hyderabad", stream:"Law", fees:230000, rating:4.8},
+  {name:"Symbiosis Law School", city:"Pune", stream:"Law", fees:300000, rating:4.4},
+  {name:"National Law University", city:"Delhi", stream:"Law", fees:220000, rating:4.7},
+  {name:"Government Law College", city:"Mumbai", stream:"Law", fees:15000, rating:4.3},
+  {name:"Tamil Nadu National Law University", city:"Tiruchirappalli", stream:"Law", fees:150000, rating:4.4}
+];
+
+const FAQS = [
+  {q:"Is this a replacement for a human career counsellor?", a:"No — it's a decision-support tool. It organizes real data (aptitude, interests, market signals) so a conversation with a counsellor, teacher, or parent starts from evidence instead of guesswork."},
+  {q:"How is the career match percentage calculated?", a:"Each career has an interest and skill profile. Your slider ratings are compared against those profiles using a weighted similarity score, then blended into a single match percentage."},
+  {q:"Is my data sent to a server?", a:"No. Everything — your profile, matches, charts, and PDF report — is generated and stored entirely in your browser. Refreshing the page will reset your session."},
+  {q:"Can I use this for streams other than Science?", a:"Yes. The career, course, and college datasets include Commerce, Arts, Law, and Design paths alongside Science and Engineering."},
+  {q:"How accurate is the skill gap analysis?", a:"It compares your self-rated skill levels to the typical skill profile required for your selected career, based on industry role expectations — treat it as a directional guide, not a certified assessment."},
+  {q:"Can I download my results?", a:"Yes — the Career Report Generator compiles your profile, top matches, skill gaps, and roadmap into a PDF you can download and share instantly."}
+];
+
+/* ---------------------------------------------------------
+   1. GLOBAL PROFILE STATE
+--------------------------------------------------------- */
+const profile = {
+  name:"Aditi Sharma",
+  stream:"Science",
+  score:88,
+  interests:{tech:7,creativity:6,science:7,business:3,helping:4,leadership:5},
+  skills:{coding:6,math:7,communication:6,problem:7,design:4,leadership:5},
+  topMatches:[],
+  gapCareerId:null,
+  gapSkills:null,
+  gapResult:null,
+  roadmapCareerId:null,
+  roadmapStages:null,
+  sd:{attendance:92, score:85, hours:18, extra:3, goal:"Crack a top engineering entrance exam"}
+};
+
+function careerById(id){ return CAREERS.find(c=>c.id===id); }
+
+/* ---------------------------------------------------------
+   2. LOADER
+--------------------------------------------------------- */
+window.addEventListener("load", ()=>{
+  setTimeout(()=>{
+    document.getElementById("loader").classList.add("hide");
+  }, 900);
+});
+
+/* ---------------------------------------------------------
+   3. THEME TOGGLE
+--------------------------------------------------------- */
+const root = document.documentElement;
+const themeToggle = document.getElementById("themeToggle");
+function applyTheme(t){
+  root.setAttribute("data-theme", t);
+  localStorage.setItem("pf-theme", t);
+}
+(function initTheme(){
+  const saved = localStorage.getItem("pf-theme");
+  if(saved){ applyTheme(saved); }
+  else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){ applyTheme("dark"); }
+  else { applyTheme("light"); }
+})();
+themeToggle.addEventListener("click", ()=>{
+  const current = root.getAttribute("data-theme");
+  applyTheme(current === "dark" ? "light" : "dark");
+});
+
+/* ---------------------------------------------------------
+   4. NAVBAR: scroll shadow + mobile menu + smooth scroll
+--------------------------------------------------------- */
+const navbar = document.getElementById("navbar");
+const hamburger = document.getElementById("hamburger");
+window.addEventListener("scroll", ()=>{
+  navbar.classList.toggle("scrolled", window.scrollY > 12);
+  document.getElementById("backToTop").classList.toggle("show", window.scrollY > 700);
+});
+hamburger.addEventListener("click", ()=>{
+  navbar.classList.toggle("open");
+  hamburger.classList.toggle("active");
+});
+document.querySelectorAll('.nav-link, .footer-col a, .brand, .btn[href^="#"]').forEach(el=>{
+  el.addEventListener("click", (e)=>{
+    const href = el.getAttribute("href");
+    if(href && href.startsWith("#")){
+      navbar.classList.remove("open");
+      hamburger.classList.remove("active");
+    }
+  });
+});
+document.getElementById("backToTop").addEventListener("click", ()=>{
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+
+/* ---------------------------------------------------------
+   5. HERO CANVAS ANIMATION — particle network
+--------------------------------------------------------- */
+try{
+(function heroCanvas(){
+  const canvas = document.getElementById("heroCanvas");
+  const ctx = canvas.getContext("2d");
+  let w, h, particles = [];
+  const COUNT = 60;
+
+  function resize(){
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  function makeParticles(){
+    particles = Array.from({length: COUNT}, ()=>({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.35, vy: (Math.random()-0.5)*0.35,
+      r: Math.random()*1.6 + 0.6
+    }));
+  }
+  function step(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0 || p.x > w) p.vx *= -1;
+      if(p.y < 0 || p.y > h) p.vy *= -1;
+    }
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const a = particles[i], b = particles[j];
+        const dx = a.x-b.x, dy = a.y-b.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < 140){
+          ctx.strokeStyle = `rgba(15,169,142,${0.12*(1-dist/140)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.stroke();
+        }
+      }
+    }
+    for(const p of particles){
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle = "rgba(245,165,36,0.55)";
+      ctx.fill();
+    }
+    requestAnimationFrame(step);
+  }
+  resize(); makeParticles();
+  window.addEventListener("resize", ()=>{ resize(); makeParticles(); });
+  if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    requestAnimationFrame(step);
+  }
+})();
+}catch(err){ console.warn("Hero canvas animation skipped:", err); }
+
+/* ---------------------------------------------------------
+   6. ANIMATED COUNTERS
+--------------------------------------------------------- */
+try{
+(function counters(){
+  const nums = document.querySelectorAll(".stat-num");
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        animateCount(entry.target);
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.5});
+  nums.forEach(n=>obs.observe(n));
+
+  function animateCount(el){
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || "";
+    const duration = 1400;
+    const startTime = performance.now();
+    function tick(now){
+      const progress = Math.min((now - startTime)/duration, 1);
+      const eased = 1 - Math.pow(1-progress, 3);
+      el.textContent = Math.round(target*eased).toLocaleString("en-IN") + suffix;
+      if(progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+})();
+}catch(err){ console.warn("Animated counters skipped:", err); }
+
+/* ---------------------------------------------------------
+   7. SCROLL REVEAL for cards/sections
+--------------------------------------------------------- */
+try{
+(function reveal(){
+  const targets = document.querySelectorAll(".feature-card, .cpd-card, .pillar, .model-panel");
+  targets.forEach(t=>{ t.style.opacity = 0; t.style.transform = "translateY(18px)"; t.style.transition = "opacity .6s ease, transform .6s ease"; });
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.style.opacity = 1;
+        entry.target.style.transform = "none";
+        obs.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.12});
+  targets.forEach(t=>obs.observe(t));
+})();
+}catch(err){ console.warn("Scroll reveal skipped:", err); }
+
+/* ---------------------------------------------------------
+   8. SLIDER BUILDER HELPER
+--------------------------------------------------------- */
+function buildSliders(container, keys, values, onChange){
+  container.innerHTML = "";
+  keys.forEach(k=>{
+    const wrap = document.createElement("div");
+    wrap.className = "slider-item";
+    const val = values[k.key] ?? 5;
+    wrap.innerHTML = `
+      <div class="slabel"><span>${k.label}</span><span class="sval">${val}</span></div>
+      <input type="range" min="1" max="10" value="${val}" data-key="${k.key}">
+    `;
+    const input = wrap.querySelector("input");
+    const valSpan = wrap.querySelector(".sval");
+    input.addEventListener("input", ()=>{
+      valSpan.textContent = input.value;
+      values[k.key] = parseInt(input.value,10);
+      if(onChange) onChange();
+    });
+    container.appendChild(wrap);
+  });
+}
+
+/* ---------------------------------------------------------
+   9. MODEL 1 — CAREER RECOMMENDATION SYSTEM
+--------------------------------------------------------- */
+const interestValues = {...profile.interests};
+const skillValues = {...profile.skills};
+buildSliders(document.getElementById("interestSliders"), INTEREST_KEYS, interestValues);
+buildSliders(document.getElementById("skillSliders"), SKILL_KEYS, skillValues);
+
+function scoreCareer(career, interests, skills){
+  let interestScore = 0, interestMax = 0;
+  INTEREST_KEYS.forEach(k=>{
+    interestMax += 10*10;
+    interestScore += (10 - Math.abs(career.interests[k.key] - interests[k.key])) * 10;
+  });
+  let skillScore = 0, skillMax = 0;
+  SKILL_KEYS.forEach(k=>{
+    skillMax += 10*10;
+    skillScore += (10 - Math.abs(career.skills[k.key] - skills[k.key])) * 10;
+  });
+  const pct = ((interestScore/interestMax)*0.55 + (skillScore/skillMax)*0.45) * 100;
+  return Math.max(0, Math.min(100, Math.round(pct)));
+}
+
+function renderCareerResults(matches){
+  const box = document.getElementById("careerResults");
+  if(!matches.length){
+    box.innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div><p>No matches yet — adjust sliders and try again.</p></div>`;
+    return;
+  }
+  box.innerHTML = matches.map(m=>`
+    <div class="match-card">
+      <div class="match-top">
+        <h4>${m.career.name}</h4>
+        <span class="match-badge">${m.pct}% match</span>
+      </div>
+      <p class="match-desc">${m.career.description}</p>
+      <div class="match-meta">
+        <span>Stream: <strong>${m.career.stream}</strong></span>
+        <span>Avg Salary: <strong>₹${m.career.salary} LPA</strong></span>
+        <span>5-yr Growth: <strong>${m.career.growth}%</strong></span>
+      </div>
+    </div>
+  `).join("");
+}
+
+document.getElementById("careerForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  try{
+    profile.name = document.getElementById("c_name").value || "Student";
+    profile.stream = document.getElementById("c_stream").value;
+    profile.score = parseInt(document.getElementById("c_score").value,10) || 0;
+    profile.interests = {...interestValues};
+    profile.skills = {...skillValues};
+
+    const matches = CAREERS.map(career=>({career, pct: scoreCareer(career, profile.interests, profile.skills)}))
+      .sort((a,b)=>b.pct - a.pct)
+      .slice(0,5);
+    profile.topMatches = matches;
+    renderCareerResults(matches);
+    populateDependentSelects();
+    updateDashboardOverview();
+    updateReportPreview();
+    document.getElementById("courseCareerSelect").value = matches[0].career.id;
+    renderCourses(matches[0].career.id);
+  }catch(err){
+    console.error("Career Recommendation failed:", err);
+    document.getElementById("careerResults").innerHTML =
+      `<div class="empty-state"><div class="empty-icon">⚠️</div><p>Something went wrong generating matches. Please refresh the page and try again.</p></div>`;
+  }
+});
+
+document.getElementById("careerReset").addEventListener("click", ()=>{
+  document.getElementById("careerForm").reset();
+  document.getElementById("c_score").value = 88;
+  INTEREST_KEYS.forEach(k=> interestValues[k.key] = 5);
+  SKILL_KEYS.forEach(k=> skillValues[k.key] = 5);
+  buildSliders(document.getElementById("interestSliders"), INTEREST_KEYS, interestValues);
+  buildSliders(document.getElementById("skillSliders"), SKILL_KEYS, skillValues);
+  document.getElementById("careerResults").innerHTML = `<div class="empty-state"><div class="empty-icon">🎯</div><p>Your ranked career matches will appear here.</p></div>`;
+  profile.topMatches = [];
+  updateDashboardOverview();
+  updateReportPreview();
+});
+
+/* ---------------------------------------------------------
+   10. MODEL 2 — COURSE RECOMMENDATION
+--------------------------------------------------------- */
+const courseCareerSelect = document.getElementById("courseCareerSelect");
+
+function populateCareerSelect(selectEl){
+  selectEl.innerHTML = CAREERS.map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+}
+function populateDependentSelects(){
+  [courseCareerSelect, document.getElementById("gapCareerSelect"), document.getElementById("roadmapCareerSelect")]
+    .forEach(sel=>{
+      if(sel.dataset.filled) return;
+    });
+}
+populateCareerSelect(courseCareerSelect);
+populateCareerSelect(document.getElementById("gapCareerSelect"));
+populateCareerSelect(document.getElementById("roadmapCareerSelect"));
+
+function renderCourses(careerId){
+  const courses = COURSE_MAP[careerId] || [];
+  const grid = document.getElementById("courseGrid");
+  grid.innerHTML = courses.map(c=>`
+    <div class="course-card">
+      <span class="course-tag">${c.level}</span>
+      <h4>${c.name}</h4>
+      <p>${c.desc}</p>
+      <div class="course-foot"><span>${c.provider}</span><span>${c.duration}</span></div>
+    </div>
+  `).join("");
+}
+courseCareerSelect.addEventListener("change", ()=> renderCourses(courseCareerSelect.value));
+document.getElementById("courseUseTop").addEventListener("click", ()=>{
+  if(profile.topMatches.length){
+    courseCareerSelect.value = profile.topMatches[0].career.id;
+    renderCourses(courseCareerSelect.value);
+  } else {
+    alert("Run the Career Recommendation tool first to get your top match.");
+  }
+});
+renderCourses(courseCareerSelect.value);
+
+/* ---------------------------------------------------------
+   11. MODEL 3 — COLLEGE RECOMMENDATION
+--------------------------------------------------------- */
+const collegeStreamSel = document.getElementById("collegeStream");
+const collegeBudget = document.getElementById("collegeBudget");
+const collegeBudgetVal = document.getElementById("collegeBudgetVal");
+const collegeCitySel = document.getElementById("collegeCity");
+const collegeCityList = document.getElementById("collegeCityList");
+
+(function initCollegeCities(){
+  const cities = [...new Set(COLLEGES.map(c=>c.city))].sort();
+  collegeCityList.innerHTML = cities.map(city=>`<option value="${city}"></option>`).join("");
+})();
+
+function formatINR(n){ return "₹" + n.toLocaleString("en-IN"); }
+
+function capPerCity(list, maxPerCity){
+  const counts = {};
+  const capped = [];
+  for(const c of list){
+    counts[c.city] = (counts[c.city] || 0) + 1;
+    if(counts[c.city] <= maxPerCity) capped.push(c);
+  }
+  return capped;
+}
+
+function renderColleges(){
+  const stream = collegeStreamSel.value;
+  const budget = parseInt(collegeBudget.value,10);
+  const city = collegeCitySel.value.trim().toLowerCase();
+  collegeBudgetVal.textContent = formatINR(budget);
+
+  let filtered = COLLEGES.filter(c=>
+    (stream==="all" || c.stream===stream) &&
+    c.fees <= budget &&
+    (city==="" || c.city.toLowerCase().includes(city))
+  ).sort((a,b)=>b.rating-a.rating);
+
+  filtered = capPerCity(filtered, 10);
+
+  const grid = document.getElementById("collegeGrid");
+  if(!filtered.length){
+    grid.innerHTML = `<div class="no-results">No colleges match these filters — try a different city spelling or a higher budget.</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(c=>`
+    <div class="college-card">
+      <div class="college-top">
+        <span class="college-stream-tag">${c.stream}</span>
+        <span class="college-rating">★ ${c.rating}</span>
+      </div>
+      <h4>${c.name}</h4>
+      <p class="college-loc">${c.city}, India</p>
+      <p class="college-fees">${formatINR(c.fees)} <span>/ year</span></p>
+      <button class="college-view-btn" data-college-idx="${COLLEGES.indexOf(c)}">View Ratings</button>
+    </div>
+  `).join("");
+}
+[collegeStreamSel, collegeBudget, collegeCitySel].forEach(el=> el.addEventListener("input", renderColleges));
+document.getElementById("collegeReset").addEventListener("click", ()=>{
+  collegeStreamSel.value = "all"; collegeBudget.value = 2500000; collegeCitySel.value = "";
+  renderColleges();
+});
+renderColleges();
+
+/* ---------- College Ratings Modal ---------- */
+const RATING_CATEGORIES = ["Academics","Placements","Infrastructure","Faculty","Value for Money"];
+
+function hashStr(str){
+  let h = 0;
+  for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) % 1000; }
+  return h;
+}
+function categoryRating(college, category){
+  const seed = hashStr(college.name + category);
+  const offset = ((seed % 9) - 4) / 10; // -0.4 to +0.4
+  let val = college.rating + offset;
+  val = Math.max(3.0, Math.min(5.0, val));
+  return Math.round(val * 10) / 10;
+}
+function starString(rating){
+  const full = Math.round(rating);
+  return "★".repeat(full) + "☆".repeat(5-full);
+}
+
+function openCollegeModal(college){
+  const body = document.getElementById("collegeModalBody");
+  const breakdown = RATING_CATEGORIES.map(cat=>{
+    const val = categoryRating(college, cat);
+    return `
+      <div class="rating-row">
+        <div class="rating-row-top"><span>${cat}</span><span>${val.toFixed(1)} / 5</span></div>
+        <div class="rating-bar"><div class="rating-bar-fill" style="width:${(val/5)*100}%"></div></div>
+      </div>
+    `;
+  }).join("");
+
+  body.innerHTML = `
+    <span class="cm-stream-tag">${college.stream}</span>
+    <h3 class="cm-title">${college.name}</h3>
+    <p class="cm-loc">${college.city}, India</p>
+    <div class="cm-overall">
+      <div class="cm-score">${college.rating.toFixed(1)}</div>
+      <div>
+        <div class="cm-stars">${starString(college.rating)}</div>
+        <div class="cm-overall-label">Overall Student Rating</div>
+      </div>
+    </div>
+    ${breakdown}
+    <div class="cm-fees">
+      <span>Annual Fees</span>
+      <strong>${formatINR(college.fees)}</strong>
+    </div>
+  `;
+  document.getElementById("collegeModalOverlay").classList.add("show");
+}
+function closeCollegeModal(){
+  document.getElementById("collegeModalOverlay").classList.remove("show");
+}
+document.getElementById("collegeGrid").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".college-view-btn");
+  if(!btn) return;
+  const idx = parseInt(btn.dataset.collegeIdx, 10);
+  const college = COLLEGES[idx];
+  if(college) openCollegeModal(college);
+});
+document.getElementById("collegeModalClose").addEventListener("click", closeCollegeModal);
+document.getElementById("collegeModalOverlay").addEventListener("click", (e)=>{
+  if(e.target.id === "collegeModalOverlay") closeCollegeModal();
+});
+document.addEventListener("keydown", (e)=>{
+  if(e.key === "Escape") closeCollegeModal();
+});
+
+/* ---------------------------------------------------------
+   12. MODEL 4 — SKILL GAP ANALYSIS
+--------------------------------------------------------- */
+const gapCareerSelect = document.getElementById("gapCareerSelect");
+const gapSliderValues = {...profile.skills};
+let gapChart = null;
+
+function buildGapSliders(){
+  buildSliders(document.getElementById("gapSliderContainer"), SKILL_KEYS, gapSliderValues);
+}
+buildGapSliders();
+
+function analyzeGap(){
+  if(!chartReady || typeof Chart === "undefined"){
+    alert("Chart.js couldn't load from any CDN — check your internet connection and try again.");
+    return;
+  }
+  const career = careerById(gapCareerSelect.value);
+  profile.gapCareerId = career.id;
+  profile.gapSkills = {...gapSliderValues};
+
+  const labels = SKILL_KEYS.map(k=>k.label);
+  const current = SKILL_KEYS.map(k=>gapSliderValues[k.key]);
+  const required = SKILL_KEYS.map(k=>career.skills[k.key]);
+
+  const ctx = document.getElementById("gapChart").getContext("2d");
+  if(gapChart) gapChart.destroy();
+  gapChart = new Chart(ctx, {
+    type:"radar",
+    data:{
+      labels,
+      datasets:[
+        {label:"Your Level", data: current, backgroundColor:"rgba(15,169,142,0.25)", borderColor:"#0FA98E", pointBackgroundColor:"#0FA98E"},
+        {label: career.name + " Requires", data: required, backgroundColor:"rgba(245,165,36,0.2)", borderColor:"#F5A524", pointBackgroundColor:"#F5A524"}
+      ]
+    },
+    options:{
+      responsive:true,
+      scales:{ r:{ min:0, max:10, ticks:{stepSize:2}, pointLabels:{font:{size:11}} } },
+      plugins:{ legend:{ position:"bottom" } }
+    }
+  });
+
+  const gapList = document.getElementById("gapList");
+  const rows = SKILL_KEYS.map(k=>{
+    const diff = career.skills[k.key] - gapSliderValues[k.key];
+    let status = "ok", label = "On track";
+    if(diff >= 4){ status="bad"; label = `Needs +${diff}`; }
+    else if(diff >= 2){ status="warn"; label = `Needs +${diff}`; }
+    return {label:k.label, status, note:label};
+  });
+  profile.gapResult = rows;
+  gapList.innerHTML = rows.map(r=>`
+    <div class="gap-row">
+      <span class="gname">${r.label}</span>
+      <span class="gap-status ${r.status}">${r.note}</span>
+    </div>
+  `).join("");
+
+  updateDashboardOverview();
+  updateReportPreview();
+}
+document.getElementById("gapAnalyzeBtn").addEventListener("click", analyzeGap);
+document.getElementById("gapReset").addEventListener("click", ()=>{
+  SKILL_KEYS.forEach(k=> gapSliderValues[k.key] = profile.skills[k.key] || 5);
+  buildGapSliders();
+  if(gapChart){ gapChart.destroy(); gapChart=null; }
+  document.getElementById("gapList").innerHTML = "";
+  profile.gapResult = null;
+  updateDashboardOverview();
+  updateReportPreview();
+});
+
+/* ---------------------------------------------------------
+   13. MODEL 5 — CAREER ROADMAP GENERATOR
+--------------------------------------------------------- */
+const roadmapCareerSelect = document.getElementById("roadmapCareerSelect");
+const roadmapYearSelect = document.getElementById("roadmapYear");
+const YEAR_OFFSET = {school:0, year1:1, year2:2, year3:3};
+const WHEN_LABELS = ["Right Now","Next 6–12 Months","Year 2–3","Final Stretch"];
+
+function generateRoadmap(){
+  const career = careerById(roadmapCareerSelect.value);
+  const startIdx = YEAR_OFFSET[roadmapYearSelect.value] || 0;
+  const stages = career.roadmap.slice(startIdx);
+  profile.roadmapCareerId = career.id;
+  profile.roadmapStages = stages;
+
+  const timeline = document.getElementById("roadmapTimeline");
+  timeline.innerHTML = stages.map((s, i)=>`
+    <div class="timeline-stage">
+      <span class="timeline-dot"></span>
+      <span class="stage-when">${WHEN_LABELS[Math.min(i, WHEN_LABELS.length-1)]}</span>
+      <h4>${s.title}</h4>
+      <ul>${s.tasks.map(t=>`<li>${t}</li>`).join("")}</ul>
+    </div>
+  `).join("");
+
+  updateDashboardOverview();
+  updateReportPreview();
+}
+document.getElementById("roadmapGenBtn").addEventListener("click", generateRoadmap);
+document.getElementById("roadmapReset").addEventListener("click", ()=>{
+  roadmapYearSelect.value = "school";
+  document.getElementById("roadmapTimeline").innerHTML = `<div class="empty-state"><div class="empty-icon">🗺️</div><p>Choose a career and generate your roadmap.</p></div>`;
+  profile.roadmapStages = null;
+  updateDashboardOverview();
+  updateReportPreview();
+});
+
+/* ---------------------------------------------------------
+   14. MODEL 6 — STUDENT DASHBOARD
+--------------------------------------------------------- */
+function renderStudentDashboard(){
+  const d = profile.sd;
+  const overallScore = Math.round((d.attendance*0.25 + d.score*0.45 + Math.min(d.hours*2,100)*0.2 + Math.min(d.extra*10,100)*0.1));
+  let note = "Keep up the consistency.";
+  if(overallScore >= 85) note = "Excellent all-round performance!";
+  else if(overallScore >= 65) note = "Solid progress — a little more focus will help.";
+  else note = "There's real room to grow — start with study hours.";
+
+  const cards = [
+    {label:"Attendance", value: d.attendance + "%", note: d.attendance>=90 ? "Great consistency" : "Try to push above 90%"},
+    {label:"Average Score", value: d.score + "%", note: d.score>=80 ? "Strong academic base" : "Focus on weaker subjects"},
+    {label:"Study Hours / Week", value: d.hours + "h", note: d.hours>=15 ? "Healthy study routine" : "Consider adding more focused hours"},
+    {label:"Extracurriculars", value: d.extra, note: d.extra>=2 ? "Well-rounded profile" : "Add 1-2 activities for a fuller profile"},
+  ];
+  const grid = document.getElementById("sdCards");
+  grid.innerHTML = cards.map(c=>`
+    <div class="sd-card">
+      <p class="sd-label">${c.label}</p>
+      <p class="sd-value">${c.value}</p>
+      <p class="sd-note">${c.note}</p>
+    </div>
+  `).join("") + `
+    <div class="sd-card wide">
+      <p class="sd-label">Overall Readiness Score</p>
+      <p class="sd-value">${overallScore}/100</p>
+      <div class="progress"><div class="progress-fill" style="width:${overallScore}%"></div></div>
+      <p class="sd-note"><strong>Goal:</strong> ${d.goal} — ${note}</p>
+    </div>
+  `;
+}
+document.getElementById("sdUpdateBtn").addEventListener("click", ()=>{
+  profile.sd = {
+    attendance: parseInt(document.getElementById("sd_attendance").value,10) || 0,
+    score: parseInt(document.getElementById("sd_score").value,10) || 0,
+    hours: parseInt(document.getElementById("sd_hours").value,10) || 0,
+    extra: parseInt(document.getElementById("sd_extra").value,10) || 0,
+    goal: document.getElementById("sd_goal").value || "Not specified"
+  };
+  renderStudentDashboard();
+});
+document.getElementById("sdReset").addEventListener("click", ()=>{
+  document.getElementById("sd_attendance").value = 92;
+  document.getElementById("sd_score").value = 85;
+  document.getElementById("sd_hours").value = 18;
+  document.getElementById("sd_extra").value = 3;
+  document.getElementById("sd_goal").value = "Crack a top engineering entrance exam";
+  profile.sd = {attendance:92, score:85, hours:18, extra:3, goal:"Crack a top engineering entrance exam"};
+  renderStudentDashboard();
+});
+renderStudentDashboard();
+
+/* ---------------------------------------------------------
+   15. MODEL 7 — ANALYTICS DASHBOARD (Chart.js)
+--------------------------------------------------------- */
+let demandChart, salaryChart, skillsChart, growthChart;
+const CHART_COLORS = ["#0FA98E","#1C5CA6","#F5A524","#EF6461","#16233F","#0C8A75","#E0900F","#5B6479","#3DD9BE","#8E7CC3"];
+
+function buildAnalyticsCharts(){
+  if(!chartReady || typeof Chart === "undefined") return;
+  const streamFilter = document.getElementById("analyticsStream").value;
+  const filtered = CAREERS.filter(c=> streamFilter==="all" || c.stream===streamFilter);
+  const labels = filtered.map(c=>c.name);
+
+  const demandCtx = document.getElementById("chartDemand").getContext("2d");
+  if(demandChart) demandChart.destroy();
+  demandChart = new Chart(demandCtx, {
+    type:"bar",
+    data:{ labels, datasets:[{ label:"Demand Index", data: filtered.map(c=>c.demand), backgroundColor: CHART_COLORS }] },
+    options:{ responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true,max:100}} }
+  });
+
+  const salaryCtx = document.getElementById("chartSalary").getContext("2d");
+  if(salaryChart) salaryChart.destroy();
+  salaryChart = new Chart(salaryCtx, {
+    type:"bar",
+    data:{ labels, datasets:[{ label:"Avg Salary (LPA)", data: filtered.map(c=>c.salary), backgroundColor:"#F5A524" }] },
+    options:{ responsive:true, indexAxis:"y", plugins:{legend:{display:false}} }
+  });
+
+  const skillsCtx = document.getElementById("chartSkills").getContext("2d");
+  if(skillsChart) skillsChart.destroy();
+  skillsChart = new Chart(skillsCtx, {
+    type:"doughnut",
+    data:{ labels: SKILL_KEYS.map(k=>k.label), datasets:[{ data: SKILL_KEYS.map(k=>profile.skills[k.key]), backgroundColor: CHART_COLORS }] },
+    options:{ responsive:true, plugins:{legend:{position:"bottom", labels:{boxWidth:12,font:{size:10}}}} }
+  });
+
+  const growthCtx = document.getElementById("chartGrowth").getContext("2d");
+  if(growthChart) growthChart.destroy();
+  growthChart = new Chart(growthCtx, {
+    type:"line",
+    data:{ labels, datasets:[{ label:"5-Year Growth %", data: filtered.map(c=>c.growth), borderColor:"#0FA98E", backgroundColor:"rgba(15,169,142,0.2)", fill:true, tension:0.35 }] },
+    options:{ responsive:true, plugins:{legend:{display:false}} }
+  });
+}
+document.getElementById("analyticsStream").addEventListener("change", buildAnalyticsCharts);
+window.addEventListener("load", buildAnalyticsCharts);
+
+/* ---------------------------------------------------------
+   16. MODEL 8 — CAREER REPORT GENERATOR (jsPDF)
+--------------------------------------------------------- */
+function updateReportPreview(){
+  const box = document.getElementById("reportPreview");
+  if(!profile.topMatches.length){
+    box.innerHTML = `<div class="empty-state"><div class="empty-icon">📄</div><p>Run the Career Recommendation and Skill Gap tools first, then generate your report.</p></div>`;
+    return;
+  }
+  const top = profile.topMatches[0];
+  box.innerHTML = `
+    <div class="report-block">
+      <h4>Student Profile</h4>
+      <p><strong>${profile.name}</strong> · ${profile.stream} Stream · Score: ${profile.score}%</p>
+    </div>
+    <div class="report-block">
+      <h4>Top Career Matches</h4>
+      ${profile.topMatches.slice(0,3).map(m=>`<p>${m.career.name} — ${m.pct}% match</p>`).join("")}
+    </div>
+    <div class="report-block">
+      <h4>Skill Gap Snapshot</h4>
+      ${profile.gapResult ? profile.gapResult.map(r=>`<p>${r.label}: ${r.note}</p>`).join("") : `<p>Not yet analyzed — visit Skill Gap Analysis above.</p>`}
+    </div>
+    <div class="report-block">
+      <h4>Roadmap</h4>
+      ${profile.roadmapStages ? `<p>${profile.roadmapStages.length} stages generated for ${careerById(profile.roadmapCareerId).name}.</p>` : `<p>Not yet generated — visit the Roadmap Generator above.</p>`}
+    </div>
+  `;
+}
+
+document.getElementById("generateReportBtn").addEventListener("click", ()=>{
+  if(!profile.topMatches.length){
+    alert("Please run the Career Recommendation tool first so we have data for your report.");
+    return;
+  }
+  if(!jsPDFReady || typeof window.jspdf === "undefined"){
+    alert("jsPDF couldn't load from any CDN — check your internet connection and try again.");
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
+
+  doc.setFillColor(15,27,51);
+  doc.rect(0,0,pageWidth,32,"F");
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(18);
+  doc.text("One Stop Personalized Career and Educational Advisor", 14, 20);
+  doc.setFontSize(10);
+  doc.setTextColor(200,220,215);
+  doc.text("Generated on " + new Date().toLocaleDateString("en-IN"), 14, 27);
+
+  y = 44;
+  doc.setTextColor(20,20,20);
+  doc.setFontSize(13);
+  doc.text("Student Profile", 14, y); y+=7;
+  doc.setFontSize(10.5);
+  doc.text(`Name: ${profile.name}`, 14, y); y+=6;
+  doc.text(`Stream: ${profile.stream}`, 14, y); y+=6;
+  doc.text(`Academic Score: ${profile.score}%`, 14, y); y+=10;
+
+  doc.setFontSize(13);
+  doc.text("Top Career Matches", 14, y); y+=7;
+  doc.setFontSize(10.5);
+  profile.topMatches.slice(0,5).forEach(m=>{
+    doc.text(`${m.career.name} — ${m.pct}% match  (Avg Salary: Rs.${m.career.salary} LPA, Growth: ${m.career.growth}%)`, 14, y);
+    y+=6;
+  });
+  y += 4;
+
+  const top = profile.topMatches[0].career;
+  doc.setFontSize(13);
+  doc.text(`Recommended Courses for ${top.name}`, 14, y); y+=7;
+  doc.setFontSize(10.5);
+  (COURSE_MAP[top.id]||[]).forEach(c=>{
+    const lines = doc.splitTextToSize(`${c.name} (${c.duration}) — ${c.provider}`, pageWidth-28);
+    doc.text(lines, 14, y); y += 6*lines.length;
+  });
+  y += 4;
+
+  if(profile.gapResult){
+    doc.setFontSize(13);
+    doc.text("Skill Gap Summary", 14, y); y+=7;
+    doc.setFontSize(10.5);
+    profile.gapResult.forEach(r=>{
+      doc.text(`${r.label}: ${r.note}`, 14, y); y+=6;
+    });
+    y += 4;
+  }
+
+  if(y > 240){ doc.addPage(); y = 20; }
+
+  if(profile.roadmapStages){
+    doc.setFontSize(13);
+    doc.text(`Career Roadmap — ${careerById(profile.roadmapCareerId).name}`, 14, y); y+=7;
+    doc.setFontSize(10.5);
+    profile.roadmapStages.forEach((s, i)=>{
+      if(y > 270){ doc.addPage(); y = 20; }
+      doc.setFont(undefined, "bold");
+      doc.text(`${i+1}. ${s.title}`, 14, y); y+=6;
+      doc.setFont(undefined, "normal");
+      s.tasks.forEach(t=>{
+        if(y > 270){ doc.addPage(); y = 20; }
+        const lines = doc.splitTextToSize(`   - ${t}`, pageWidth-28);
+        doc.text(lines, 14, y); y += 6*lines.length;
+      });
+    });
+  }
+
+  doc.setFontSize(8.5);
+  doc.setTextColor(140,140,140);
+  doc.text("One Stop Personalized Career and Educational Advisor. All data is illustrative and generated client-side.", 14, 290);
+
+  doc.save(`${profile.name.replace(/\s+/g,"_")}_Career_Report.pdf`);
+});
+
+document.getElementById("reportReset").addEventListener("click", ()=>{
+  profile.topMatches = [];
+  profile.gapResult = null;
+  profile.roadmapStages = null;
+  updateReportPreview();
+});
+
+/* ---------------------------------------------------------
+   17. CAREER PLANNING DASHBOARD OVERVIEW (top summary)
+--------------------------------------------------------- */
+function updateDashboardOverview(){
+  document.getElementById("cpdName").textContent = profile.name;
+
+  if(profile.topMatches.length){
+    const top = profile.topMatches[0];
+    document.getElementById("cpdTopCareer").textContent = top.career.name;
+    document.getElementById("cpdTopCareerBar").style.width = top.pct + "%";
+    document.getElementById("cpdTopCareerPct").textContent = top.pct + "% match";
+  }
+
+  if(profile.gapResult){
+    const total = profile.gapResult.length;
+    const okCount = profile.gapResult.filter(r=>r.status==="ok").length;
+    const readiness = Math.round((okCount/total)*100);
+    document.getElementById("cpdReadinessBar").style.width = readiness + "%";
+    document.getElementById("cpdReadinessPct").textContent = readiness + "% ready";
+    document.getElementById("cpdReadiness").textContent = readiness >= 75 ? "Job Ready" : readiness >= 40 ? "Building" : "Early Stage";
+  }
+
+  if(profile.roadmapStages){
+    const totalStages = careerById(profile.roadmapCareerId).roadmap.length;
+    const currentStage = totalStages - profile.roadmapStages.length + 1;
+    const pct = Math.round((currentStage/totalStages)*100);
+    document.getElementById("cpdRoadmapStage").textContent = `Stage ${currentStage} of ${totalStages}`;
+    document.getElementById("cpdRoadmapBar").style.width = pct + "%";
+    const stageNames = ["Foundation","Skill Building","Specialization","Job Readiness"];
+    document.getElementById("cpdRoadmapPct").textContent = stageNames[Math.min(currentStage-1,3)];
+  }
+}
+
+/* ---------------------------------------------------------
+   18. FAQ ACCORDION
+--------------------------------------------------------- */
+(function renderFAQ(){
+  const list = document.getElementById("faqList");
+  list.innerHTML = FAQS.map((f,i)=>`
+    <div class="faq-item" data-idx="${i}">
+      <button class="faq-q">${f.q}<span class="plus">+</span></button>
+      <div class="faq-a"><p>${f.a}</p></div>
+    </div>
+  `).join("");
+  list.querySelectorAll(".faq-item").forEach(item=>{
+    item.querySelector(".faq-q").addEventListener("click", ()=>{
+      const wasOpen = item.classList.contains("open");
+      list.querySelectorAll(".faq-item").forEach(i=>i.classList.remove("open"));
+      if(!wasOpen) item.classList.add("open");
+    });
+  });
+})();
+
+/* ---------------------------------------------------------
+   19. CONTACT FORM
+--------------------------------------------------------- */
+document.getElementById("contactForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const name = document.getElementById("ct_name").value.trim();
+  const email = document.getElementById("ct_email").value.trim();
+  const status = document.getElementById("contactStatus");
+  if(!name || !email){
+    status.textContent = "Please fill in your name and email.";
+    status.className = "form-status";
+    return;
+  }
+  status.textContent = `Thanks, ${name}! Your message has been received — a counsellor will email you at ${email} shortly.`;
+  status.className = "form-status success";
+  e.target.reset();
+  setTimeout(()=>{ status.textContent = ""; }, 6000);
+});
+
+/* ---------------------------------------------------------
+   20. INITIAL RENDER
+--------------------------------------------------------- */
+updateDashboardOverview();
+updateReportPreview();
+
+})();
+
+</script>
+</body>
+</html>
